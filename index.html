@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>LOTUS@20</title>
+  <meta name="description" content="LOTUS@20 - Twenty years of halal finance in Nigeria (2006–2026)." />
+  <meta property="og:title" content="LOTUS@20" />
+  <meta property="og:description" content="LOTUS@20 - Twenty years of halal finance in Nigeria (2006–2026)." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="icon" type="image/png" href="/images/lc-icon.png">
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar">
+    <div class="logo">
+      <img src="/images/lc-logo.png" alt="LOTUS Capital" class="logo-img">
+      <b>@20</b>
+    </div>
+    <div class="top-mid">
+      <span class="chap" id="chap">Welcome</span>
+      <span class="chap-n" id="chapN"></span>
+    </div>
+    <div class="top-actions">
+      <button class="share-btn" id="shareBtn" aria-label="Share this milestone" title="Share milestone">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+        <span class="share-lbl">Share</span>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu">&#9776; Chapters</button>
+    </div>
+  </header>
+
+  <main class="pages" id="pages">
+    <section class="page welcome" data-id="welcome" data-name="Welcome" style="--pg:var(--red)">
+      <div class="w-building-watermark" aria-hidden="true">
+        <img src="/images/designer-1.png" alt="LOTUS House" class="w-building-img">
+      </div>
+      <div class="page-inner"><div class="wrap">
+        <p class="w-kicker">2006&ndash;2026</p>
+        <h1 class="w-title" aria-label="LOTUS at 20"><span>LOTUS</span><span class="at">@<b id="cnt">20</b></span></h1>
+        <p class="w-line">Twenty years of halal finance in Nigeria.</p>
+        <div class="w-cta"><button class="btn dark big" data-goto="next">Explore our journey &rarr;</button></div>
+      </div></div>
+    </section>
+
+    <section class="page splash sp-red" data-id="journey" data-ch="1" data-name="The journey" data-splash="1" style="--pg:#C10202">
+      <img src="/images/lc-icon-transparent.png" class="sp-mark" alt="" aria-hidden="true">
+      <div class="page-inner"><div class="wrap">
+        <div class="sp-k">Chapter 01</div>
+        <div class="sp-num">01</div>
+        <h2 class="sp-title">The journey</h2>
+        <p class="sp-line">20 years in 20 moments.</p>
+      </div></div>
+    </section>
+
+    <!-- 1 TIMELINE -->
+    <section class="page carousel" data-id="timeline" data-ch="1" data-name="The timeline">
+      <div class="stage" id="stage">
+        <div class="stage-head">
+          <div>
+            <div class="st-label"><i></i>The timeline &middot; 2004&ndash;2026</div>
+            <div class="bigyr" id="bigYr" aria-live="polite">2004</div>
+            <div class="phase-name" id="phaseName">Era I &middot; Foundations</div>
+          </div>
+          <div class="st-controls">
+            <div class="count" id="count">01 / 20</div>
+            <div class="ctrl-row">
+              <button class="cbtn play" id="play" aria-pressed="false">&#9654; Auto-advance (5s)</button>
+            </div>
+          </div>
+        </div>
+        <div class="track-wrap" id="twrap"><div class="track" id="track"></div></div>
+        <div class="scrub"><div class="scrub-inner">
+          <input type="range" class="range" id="range" min="0" max="19" value="0" step="1" aria-label="Scrub through the timeline">
+          <div class="phase-marks" id="marks"></div>
+          <div class="hint">Swipe, drag the slider, tap a card, or use &larr; &rarr;</div>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="page splash sp-gray" data-id="firsts-ch" data-ch="2" data-name="20 firsts &amp; records" data-splash="1" style="--pg:#EAEAEA">
+      <img src="/images/lc-icon-red.png" class="sp-mark" alt="" aria-hidden="true">
+      <div class="page-inner"><div class="wrap">
+        <div class="sp-k">Chapter 02</div>
+        <div class="sp-num">02</div>
+        <h2 class="sp-title">20 firsts &amp; records</h2>
+        <p class="sp-line">20 times LOTUS led the way.</p>
+      </div></div>
+    </section>
+
+    <section class="page carousel" data-id="firsts" data-ch="2" data-name="20 firsts &amp; records" style="--pg:#FFE1DC">
+      <div class="stage t20" id="st-firsts"></div>
+    </section>
+
+    <section class="page splash sp-red" data-id="numbers-ch" data-ch="3" data-name="By the numbers" data-splash="1" style="--pg:#C10202">
+      <img src="/images/lc-icon-transparent.png" class="sp-mark" alt="" aria-hidden="true">
+      <div class="page-inner"><div class="wrap">
+        <div class="sp-k">Chapter 03</div>
+        <div class="sp-num">03</div>
+        <h2 class="sp-title">By the numbers</h2>
+        <p class="sp-line">20 facts about our funds.</p>
+      </div></div>
+    </section>
+
+    <section class="page carousel" data-id="facts" data-ch="3" data-name="20 fund facts" style="--pg:#F5F5F5">
+      <div class="stage t20" id="st-facts"></div>
+    </section>
+
+    <section class="page splash sp-gray" data-id="impact-ch" data-ch="4" data-name="Real-world impact" data-splash="1" style="--pg:#EAEAEA">
+      <img src="/images/lc-icon-red.png" class="sp-mark" alt="" aria-hidden="true">
+      <div class="page-inner"><div class="wrap">
+        <div class="sp-k">Chapter 04</div>
+        <div class="sp-num">04</div>
+        <h2 class="sp-title">Real-world impact</h2>
+        <p class="sp-line">20 ways our work has made an impact.</p>
+      </div></div>
+    </section>
+
+    <section class="page carousel" data-id="impact20" data-ch="4" data-name="20 ways we made an impact" style="--pg:#FFE1DC">
+      <div class="stage t20" id="st-impact20"></div>
+    </section>
+
+    <section class="page splash sp-red" data-id="halal-ch" data-ch="5" data-name="How halal works" data-splash="1" style="--pg:#C10202">
+      <img src="/images/lc-icon-transparent.png" class="sp-mark" alt="" aria-hidden="true">
+      <div class="page-inner"><div class="wrap">
+        <div class="sp-k">Chapter 05</div>
+        <div class="sp-num">05</div>
+        <h2 class="sp-title">How halal works</h2>
+        <p class="sp-line">20 ways we make halal investing possible.</p>
+      </div></div>
+    </section>
+
+    <!-- 5 SHARIAH -->
+    <section class="page carousel" data-id="halal20" data-ch="5" data-name="20 ways we make it halal" style="--pg:#F5F5F5">
+      <div class="stage t20" id="st-halal20"></div>
+    </section>
+
+    <section class="page splash sp-gray" data-id="people-ch" data-ch="6" data-name="The people" data-splash="1" style="--pg:#EAEAEA">
+      <img src="/images/lc-icon-red.png" class="sp-mark" alt="" aria-hidden="true">
+      <div class="page-inner"><div class="wrap">
+        <div class="sp-k">Chapter 06</div>
+        <div class="sp-num">06</div>
+        <h2 class="sp-title">The people</h2>
+        <p class="sp-line">20 personalities steering us.</p>
+      </div></div>
+    </section>
+
+    <section class="page" data-id="founder" data-ch="6" data-name="The founder" style="--pg:#F5F5F5">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>The <em>founder</em></h2></div>
+        <div class="fstory">
+          <div class="fwho">
+            <div class="mono-mark" aria-hidden="true"><span>HA</span></div>
+            <h3>Hajara Folake Adeola</h3>
+            <div class="role">Founder, Managing Director &amp; CEO</div>
+            <p class="edu">King's College London &middot; Durham (M.Sc. Islamic Finance) &middot; Exeter (MBA)</p>
+          </div>
+          <div class="fsteps">
+            <div class="stepbar" id="storyTabs" role="tablist" aria-label="Founder's story"></div>
+            <div class="storycard" id="storyCard" aria-live="polite"></div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="page carousel" data-id="people20" data-ch="6" data-name="20 personalities" style="--pg:#FFE1DC">
+      <div class="stage t20" id="st-people20"></div>
+    </section>
+
+    <section class="page splash sp-red" data-id="press-ch" data-ch="7" data-name="In the press" data-splash="1" style="--pg:#C10202">
+      <img src="/images/lc-icon-transparent.png" class="sp-mark" alt="" aria-hidden="true">
+      <div class="page-inner"><div class="wrap">
+        <div class="sp-k">Chapter 07</div>
+        <div class="sp-num">07</div>
+        <h2 class="sp-title">In the press</h2>
+        <p class="sp-line">Top 20 headlines over 20 years.</p>
+      </div></div>
+    </section>
+
+    <section class="page carousel" data-id="press" data-ch="7" data-name="Top 20 headlines" style="--pg:#FBEAE7">
+      <div class="stage t20" id="st-press"></div>
+    </section>
+
+    <section class="page splash splash-photo" data-id="home-ch" data-ch="8" data-name="Our home" data-splash="1" style="--pg:#EAEAEA">
+      <div class="page-inner"><div class="wrap sp-grid">
+        <div>
+          <div class="sp-k">Chapter 08</div>
+          <div class="sp-num">08</div>
+          <h2 class="sp-title">Our home</h2>
+          <p class="sp-line">12 locations across 7 states.</p>
+        </div>
+        <figure class="sp-photo">
+          <img src="/images/designer-1.png" alt="LOTUS House, Ikoyi, Lagos">
+          <figcaption>LOTUS House &middot; Ikoyi, Lagos</figcaption>
+        </figure>
+      </div></div>
+    </section>
+
+    <section class="page" data-id="offices" data-ch="8" data-name="12 locations" style="--pg:#EAEAEA">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>Find <em>us</em></h2><span class="tag">12 locations &middot; 7 states</span></div>
+        <div class="locchips" id="locChips"></div>
+        <div class="offices">
+          <div class="map" id="map"><svg viewBox="0 0 400 300" id="mapSvg" aria-hidden="true"></svg><span class="cap">Schematic &middot; not to scale</span></div>
+          <div class="office" id="office" aria-live="polite"></div>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="page splash sp-red" data-id="you-ch" data-ch="9" data-name="Your turn" data-splash="1" style="--pg:#C10202">
+      <img src="/images/lc-icon-transparent.png" class="sp-mark" alt="" aria-hidden="true">
+      <div class="page-inner"><div class="wrap">
+        <div class="sp-k">Chapter 09</div>
+        <div class="sp-num">09</div>
+        <h2 class="sp-title">Your turn</h2>
+        <p class="sp-line">Have we impacted you? Leave a note.</p>
+      </div></div>
+    </section>
+
+    <section class="page" data-id="wall" data-ch="9" data-name="Leave a note" style="--pg:#FFE1DC">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>Have we <em>impacted</em> you?</h2><span class="tag" id="wallMode">Leave a note</span></div>
+        <div class="wall-grid">
+          <form class="note-form box" id="noteForm" novalidate>
+            <h3>Leave a note</h3>
+            <label for="nName">Your name</label>
+            <input id="nName" name="name" maxlength="40" autocomplete="name" placeholder="e.g. Aisha Bello">
+            <label for="nRel">You are</label>
+            <select id="nRel" name="rel">
+              <option value="">Choose one</option><option>A client</option><option>Staff</option><option>Former staff</option><option>A partner</option><option>A friend of LOTUS</option>
+            </select>
+            <label for="nMsg">Your note <span class="cc" id="nCount">0 / 240</span></label>
+            <textarea id="nMsg" name="msg" maxlength="240" rows="4" placeholder="How has LOTUS made a difference for you?"></textarea>
+            <label class="consent"><input type="checkbox" id="nOk"> I'm happy for LOTUS to show my note and first name on this page.</label>
+            <p class="ferr" id="nErr" role="alert"></p>
+            <button class="btn" type="submit" id="nSend">Send my note &rarr;</button>
+            <p class="fnote">Notes appear on the wall once our team approves them.</p>
+          </form>
+          <div class="wall-side">
+            <div class="wall-head"><b id="wallCount">The wall</b><button class="mini-btn" id="wallRefresh" type="button">Refresh</button></div>
+            <div id="wallBody"></div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="page splash sp-gray" data-id="quiz-ch" data-ch="10" data-name="Know your LOTUS?" data-splash="1" style="--pg:#EAEAEA">
+      <img src="/images/lc-icon-red.png" class="sp-mark" alt="" aria-hidden="true">
+      <div class="page-inner"><div class="wrap">
+        <div class="sp-k">Chapter 10</div>
+        <div class="sp-num">10</div>
+        <h2 class="sp-title">Know your LOTUS?</h2>
+        <p class="sp-line">20 questions to test how LOTUSIAN you are.</p>
+      </div></div>
+    </section>
+
+    <section class="page" data-id="quiz" data-ch="10" data-name="The quiz" style="--pg:#F5F5F5">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>How <em>LOTUSIAN</em> are you?</h2><span class="tag">20 questions &middot; timed</span></div>
+        <div class="quiz box" id="quizBox" aria-live="polite"></div>
+      </div></div>
+    </section>
+
+    <section class="page" data-id="leaderboard" data-ch="10" data-name="Leaderboard" style="--pg:#FFE1DC">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>The <em>leader</em>board</h2><span class="tag" id="lbMode">Top 10 LOTUSIANS</span></div>
+        <div class="lb box" id="lb"></div>
+        <div class="lb-actions"><button class="btn" id="lbPlay" type="button">Take the quiz &rarr;</button><button class="btn ghost" id="lbRefresh" type="button">Refresh</button></div>
+      </div></div>
+    </section>
+
+    <section class="page splash sp-red" data-id="next-ch" data-ch="11" data-name="The next 20" data-splash="1" style="--pg:#C10202">
+      <img src="/images/lc-icon-transparent.png" class="sp-mark" alt="" aria-hidden="true">
+      <div class="page-inner"><div class="wrap">
+        <div class="sp-k">Chapter 11</div>
+        <div class="sp-num">11</div>
+        <h2 class="sp-title">The next 20</h2>
+        <p class="sp-line">Where LOTUS goes from here.</p>
+      </div></div>
+    </section>
+
+    <!-- 10 NEXT -->
+    <section class="page on-dark" data-id="next" data-ch="11" data-name="Decade three" style="--pg:#8F0101">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>Decade <em>three</em></h2><span class="tag">What's next</span></div>
+        <div class="nexts">
+          <div class="nx"><div class="no">01</div>
+            <svg viewBox="0 0 64 64" aria-hidden="true"><g stroke="#111" stroke-width="3" stroke-linejoin="round"><rect x="18" y="4" width="28" height="56" rx="4" fill="#111"/><rect x="22" y="12" width="20" height="38" fill="#FFFFFF"/><rect x="26" y="34" width="4" height="12" fill="#C10202" stroke-width="2"/><rect x="34" y="26" width="4" height="20" fill="#F5B82E" stroke-width="2"/></g></svg>
+            <h4>Halal investing in your apps</h4><p>API links with wealthtech platforms like Cowrywise for automatic micro-investing.</p></div>
+          <div class="nx"><div class="no">02</div>
+            <svg viewBox="0 0 64 64" aria-hidden="true"><g stroke="#111" stroke-width="3"><circle cx="32" cy="32" r="26" fill="#FFFFFF"/><text x="32" y="42" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="28" fill="#111" stroke="none">$</text></g></svg>
+            <h4>Dollar halal funds</h4><p>FX-denominated fixed income and Sukuk to hedge against naira depreciation.</p></div>
+          <div class="nx"><div class="no">03</div>
+            <svg viewBox="0 0 64 64" aria-hidden="true"><g stroke="#111" stroke-width="3" stroke-linejoin="round"><path d="M6 58 V30 L22 20 V58Z" fill="#C10202"/><path d="M22 58 V12 L42 4 V58Z" fill="#FFFFFF"/><path d="M42 58 V26 L58 32 V58Z" fill="#F5B82E"/><line x1="2" y1="58" x2="62" y2="58"/></g></svg>
+            <h4>Infrastructure REITs</h4><p>Non-interest REITs for transport, power and agro storage, discussed with the Finance Ministry in 2025.</p></div>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- 12 FINALE -->
+    <section class="page finale" data-id="finale" data-ch="11" data-name="Here's to the next 20" style="--pg:#C10202">
+      <div class="page-inner"><div class="wrap">
+        <h2>Here's to<br>the next 20.</h2>
+        <p class="lead">Twenty years of proving that ethical finance and strong returns belong together.</p>
+        <div class="hero-cta">
+          <a class="btn" href="https://www.lotuscapitallimited.com/" target="_blank" rel="noopener">Visit lotuscapitallimited.com &#8599;</a>
+          <button class="btn ghost" data-goto="0">Start again &#8634;</button>
+        </div>
+        <div class="legal-box">
+          <span class="ic" aria-hidden="true">!</span>
+          <div>
+            <h4>Important information</h4>
+            <p>Figures on this page come from public sources as of mid-2026 and are for information only. Past performance is not a reliable indicator of future returns. The value of investments and any income from them can go down as well as up. Read each fund's prospectus before investing. Nothing on this page is an offer or solicitation to buy or sell any investment. LOTUS Capital Limited is registered with the Securities and Exchange Commission, Nigeria, as a Fund and Portfolio Manager.</p>
+          </div>
+        </div>
+        <div class="foot">LOTUS Capital Limited &middot; Head office: Ikoyi, Lagos &middot; &copy; 2026</div>
+      </div></div>
+    </section>
+
+    <section class="page splash sp-gray" data-id="xtras-ch" data-ch="12" data-name="Xtras" data-splash="1" style="--pg:#EAEAEA">
+      <svg class="sp-mark" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="100" cy="100" r="92" stroke="#C10202" stroke-width="4" stroke-dasharray="6 6"/>
+        <path d="M100 20 C80 60, 50 85, 15 100 C50 115, 80 140, 100 180 C120 140, 150 115, 185 100 C150 85, 120 60, 100 20Z" fill="#C10202"/>
+      </svg>
+      <div class="page-inner"><div class="wrap">
+        <div class="sp-k">Chapter 12</div>
+        <div class="sp-num">12</div>
+        <h2 class="sp-title">Xtras</h2>
+        <p class="sp-line">More numbers, more stories, more detail.</p>
+      </div></div>
+    </section>
+
+    <section class="page" data-id="thennow" data-ch="12" data-name="Then &amp; now" style="--pg:#F5F5F5">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>Then &amp; <em>now</em></h2></div>
+        <div class="switch" role="group" aria-label="Choose a period">
+          <button class="sw" data-p="then" aria-pressed="true">Then</button>
+          <button class="sw" data-p="now" aria-pressed="false">Now</button>
+        </div>
+        <div class="tn" id="tn"></div>
+      </div></div>
+    </section>
+
+    <!-- 2 SCOREBOARD -->
+    <section class="page" data-id="numbers" data-ch="12" data-name="Scoreboard" style="--pg:#FFE1DC">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>The <em>score</em>board</h2><span class="tag">As of mid-2026</span></div>
+        <div class="tiles">
+          <div class="tile t-red"><div class="v" data-to="65.85" data-dec="2" data-pre="&#8358;" data-post="bn">&#8358;65.85bn</div><div class="k">In halal mutual funds</div></div>
+          <div class="tile t-white"><div class="v" data-to="30900" data-sep="1" data-post="+">30,900+</div><div class="k">Unit-holders</div></div>
+          <div class="tile t-ink"><div class="v" data-to="10">10</div><div class="k">Nigerian firsts</div></div>
+          <div class="tile t-gold"><div class="v" data-to="12">12</div><div class="k">Locations across 7 states</div></div>
+        </div>
+        <div class="banner"><b>~48%</b><span>Nigeria's Shariah fund market grew 74% to &#8358;138.26bn in H1 2026. LOTUS manages close to half of it.</span></div>
+      </div></div>
+    </section>
+
+    <!-- 3 FUNDS -->
+    <section class="page" data-id="funds" data-ch="12" data-name="The funds" style="--pg:#EAEAEA">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>Four <em>funds</em></h2><span class="tag">Tap a bar</span></div>
+        <div class="funds">
+          <div class="fund-chart box">
+            <h3>Where the &#8358;65.85bn sits</h3>
+            <div class="sub">Net asset value by fund, mid-2026</div>
+            <div class="bars" id="bars"></div>
+          </div>
+          <div class="fund-detail box" id="fundDetail" aria-live="polite"></div>
+        </div>
+      </div></div>
+    </section>
+
+    <section class="page" data-id="impact" data-ch="12" data-name="What Sukuk built" style="--pg:#FBEAE7">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>What the Sukuk <em>built</em></h2></div>
+        <p class="intro">Islamic finance is backed by real assets. Here is what some of that money became.</p>
+        <div class="impacts" id="impacts"></div>
+      </div></div>
+    </section>
+
+    <section class="page" data-id="shariah" data-ch="12" data-name="Every naira, screened" style="--pg:#EAEAEA">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>Every naira, <em>screened</em></h2><span class="tag">How Shariah compliance works</span></div>
+        <div class="screen">
+          <div class="steps" id="steps" role="tablist" aria-label="Screening steps"></div>
+          <div class="screen-panel" id="screenPanel" role="tabpanel" aria-live="polite"></div>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- 6 GLOSSARY -->
+    <section class="page" data-id="glossary" data-ch="12" data-name="Jargon, busted" style="--pg:#FFE1DC">
+      <div class="page-inner"><div class="wrap">
+        <div class="sec-title"><h2>Jargon, <em>busted</em></h2><span class="tag">Tap a word</span></div>
+        <div class="gloss">
+          <div class="terms" id="terms"></div>
+          <div class="defn" id="defn" aria-live="polite"></div>
+        </div>
+      </div></div>
+    </section>
+
+    <div class="wipe" id="wipe" aria-hidden="true"></div>
+
+    <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Chapters">
+      <div class="menu-head"><h2>All <em>chapters</em></h2><button class="menu-x" id="menuX" aria-label="Close chapters">&times;</button></div>
+      <div class="mgrid" id="mgrid"></div>
+    </div>
+  </main>
+
+  <nav class="bottombar" id="bottombar" aria-label="Unified exhibition navigation">
+    <div class="nav-left">
+      <button class="btn ghost sm" id="back" aria-label="Previous"><span class="arr">&larr;</span> <span class="back-lbl" id="backLbl">Back</span></button>
+      <button class="btn ghost sm btn-ch-jump" id="prevChBtn" aria-label="Previous chapter" title="Jump to previous chapter" hidden>&laquo; Ch</button>
+    </div>
+    <div class="nav-center">
+      <button class="nav-pill-btn" id="navPillBtn" aria-label="Chapters menu" title="View all chapters">
+        <div class="nav-pill-header">
+          <span class="nav-pill-title" id="navPillTitle">Ch 01 &middot; The journey</span>
+          <span class="nav-pill-pct" id="navPillPct">0%</span>
+        </div>
+        <span class="nav-pill-sub" id="navPillSub">Tap for chapters</span>
+        <span class="nav-pill-bar"><span class="nav-pill-bar-fill" id="navPillBarFill"></span></span>
+      </button>
+      <div class="nav-chapter-info">
+        <div class="segs" id="segs"></div>
+        <div class="nav-progress-meta" id="navProgressMeta" title="Overall journey completion">
+          <span class="nav-pct-badge" id="navPctBadge"><b id="navPctNum">0%</b></span>
+          <span class="nav-pct-lbl" id="navPctLbl">done</span>
+        </div>
+        <div class="mcount" id="mcount">Ch 01 / 12</div>
+      </div>
+      <div class="nav-card-ctrl" id="navCardCtrl" hidden>
+        <button class="nav-step-btn" id="navCardPrev" aria-label="Previous card" title="Previous card">&larr;</button>
+        <span class="nav-card-badge" id="navCardBadge">Milestone 01 / 20</span>
+        <button class="nav-step-btn" id="navCardNext" aria-label="Next card" title="Next card">&rarr;</button>
+        <button class="cbtn play sm nav-play-btn" id="navPlayBtn" aria-pressed="false" title="Auto-advance cards">&#9654; Auto (5s)</button>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="btn ghost sm btn-share-bottom" id="bottomShareBtn" aria-label="Share" title="Share milestone">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+      </button>
+      <button class="btn ghost sm btn-ch-jump" id="nextChBtn" aria-label="Skip to next chapter" title="Skip to next chapter" hidden>Next Ch &raquo;</button>
+      <button class="btn sm" id="fwd" aria-label="Next"><span class="next-lbl" id="nextLbl">Next: The timeline</span> <span class="arr">&rarr;</span></button>
+    </div>
+  </nav>
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+</div>
+
+<script type="module" src="/src/app.js"></script>
+</body>
+</html>

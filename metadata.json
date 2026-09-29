@@ -1,0 +1,6 @@
+{
+  "name": "LOTUS@20",
+  "description": "LOTUS@20 - Twenty years of halal finance in Nigeria (2006–2026).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
