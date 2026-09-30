@@ -2,6 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>
+    // In AI Studio iframe environments, ignore benign Vite WebSocket reconnection noise
+    (function(){
+      function isViteNoise(val){
+        if(!val) return false;
+        var s = typeof val === 'string' ? val : (val.message || val.stack || (val.reason && (val.reason.message || val.reason.stack)) || String(val));
+        if(!s) return false;
+        var lower = s.toLowerCase();
+        return lower.indexOf('[vite]') !== -1 || lower.indexOf('websocket') !== -1 || lower.indexOf('failed to send error to vite server') !== -1;
+      }
+      ['log', 'warn', 'error', 'info', 'debug'].forEach(function(m){
+        var orig = console[m];
+        if(typeof orig !== 'function') return;
+        console[m] = function(){
+          for(var i = 0; i < arguments.length; i++){
+            if(isViteNoise(arguments[i])) return;
+          }
+          return orig.apply(console, arguments);
+        };
+      });
+      window.addEventListener('unhandledrejection', function(e){
+        if(isViteNoise(e && (e.reason || e))){
+          e.preventDefault();
+          if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+        }
+      });
+      window.addEventListener('error', function(e){
+        if(isViteNoise(e && (e.error || e.message || e))){
+          e.preventDefault();
+          if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+        }
+      });
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>LOTUS@20</title>
   <meta name="description" content="LOTUS@20 - Twenty years of halal finance in Nigeria (2006–2026)." />
@@ -9,6 +43,13 @@
   <meta property="og:description" content="LOTUS@20 - Twenty years of halal finance in Nigeria (2006–2026)." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#C10202">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LOTUS@20">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
@@ -18,15 +59,44 @@
 <body>
 <div class="app" id="app">
   <header class="topbar">
-    <div class="logo">
-      <img src="/images/lc-logo.png" alt="LOTUS Capital" class="logo-img">
-      <b>@20</b>
-    </div>
+    <button class="logo" id="siteLogoBtn" type="button" aria-label="LOTUS Capital 20th Anniversary — Return to welcome screen" title="Back to welcome screen">
+      <img src="/images/20TH%20LOGO.png" alt="LOTUS Capital 20th Anniversary" class="logo-img">
+    </button>
     <div class="top-mid">
       <span class="chap" id="chap">Welcome</span>
       <span class="chap-n" id="chapN"></span>
     </div>
     <div class="top-actions">
+      <button class="badges-btn" id="badgesBtn" aria-label="View Milestones and Badges" aria-expanded="false" title="View unlocked commemorative badges (B)">
+        <span class="badges-btn-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="6"></circle>
+            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+          </svg>
+        </span>
+        <span class="badges-lbl">Badges</span>
+        <span class="badge-count" id="badgeCountPill">0/10</span>
+      </button>
+      <button class="audio-btn" id="audioBtn" aria-label="Unmute ambient sound and narration" aria-pressed="false" title="Turn on ambient sound & narration (M)">
+        <span class="audio-icon" id="audioIcon" aria-hidden="true">
+          <svg class="audio-svg-muted" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+          <svg class="audio-svg-playing" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+        </span>
+        <span class="audio-lbl" id="audioLbl">Sound</span>
+        <span class="audio-bars" id="audioBars" aria-hidden="true" style="display:none">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </span>
+      </button>
       <button class="share-btn" id="shareBtn" aria-label="Share this milestone" title="Share milestone">
         <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="18" cy="5" r="3"></circle>
@@ -39,6 +109,16 @@
       </button>
       <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu">&#9776; Chapters</button>
     </div>
+    <!-- Mobile Menu Toggle Button (shown on mobile, houses all header items in clean side drawer) -->
+    <button class="mobile-nav-toggle" id="mobileNavToggle" type="button" aria-expanded="false" aria-controls="mobileDrawer" aria-label="Open side navigation menu" title="Open navigation menu">
+      <span class="mobile-nav-toggle-icon" aria-hidden="true">
+        <span class="bar bar-1"></span>
+        <span class="bar bar-2"></span>
+        <span class="bar bar-3"></span>
+      </span>
+      <span class="mobile-nav-toggle-label">Menu</span>
+      <span class="mobile-nav-toggle-badge" id="mobileNavToggleBadge" style="display:none">0</span>
+    </button>
   </header>
 
   <main class="pages" id="pages">
@@ -207,13 +287,61 @@
       </div></div>
     </section>
 
-    <section class="page" data-id="offices" data-ch="8" data-name="12 locations" style="--pg:#EAEAEA">
+    <section class="page" data-id="offices" data-ch="8" data-name="How far we've grown" style="--pg:#EAEAEA">
       <div class="page-inner"><div class="wrap">
-        <div class="sec-title"><h2>Find <em>us</em></h2><span class="tag">12 locations &middot; 7 states</span></div>
-        <div class="locchips" id="locChips"></div>
-        <div class="offices">
-          <div class="map" id="map"><svg viewBox="0 0 400 300" id="mapSvg" aria-hidden="true"></svg><span class="cap">Schematic &middot; not to scale</span></div>
-          <div class="office" id="office" aria-live="polite"></div>
+        <div class="sec-title">
+          <h2>How far we've <em>grown</em></h2>
+          <span class="tag">From 1 desk to 12 centres &middot; 7 states</span>
+        </div>
+
+        <div class="growth-stats">
+          <div class="g-stat">
+            <span class="g-val">1 &rarr; 12</span>
+            <span class="g-lbl">Locations nationwide</span>
+          </div>
+          <div class="g-stat">
+            <span class="g-val">1 &rarr; 7</span>
+            <span class="g-lbl">States with physical hubs</span>
+          </div>
+          <div class="g-stat">
+            <span class="g-val">30,900+</span>
+            <span class="g-lbl">Everyday unit-holders</span>
+          </div>
+          <div class="g-stat">
+            <span class="g-val">&gt; &#8358;65bn</span>
+            <span class="g-lbl">Halal assets managed</span>
+          </div>
+        </div>
+
+        <div class="growth-layout">
+          <div class="growth-narrative">
+            <div class="growth-tabs" id="growthTabs" role="tablist" aria-label="Stages of national growth">
+              <button class="g-tab on" data-phase="all" role="tab" aria-selected="true">All 4 Chapters</button>
+              <button class="g-tab" data-phase="origin" role="tab" aria-selected="false">2006: The Seed</button>
+              <button class="g-tab" data-phase="north" role="tab" aria-selected="false">Northern Hubs</button>
+              <button class="g-tab" data-phase="belt" role="tab" aria-selected="false">Niger &amp; Rivers</button>
+              <button class="g-tab" data-phase="retail" role="tab" aria-selected="false">Community Hubs</button>
+            </div>
+            <div class="growth-cards" id="growthCards" aria-live="polite"></div>
+          </div>
+
+          <div class="growth-visual">
+            <div class="growth-map-card box">
+              <div class="g-map-header">
+                <span class="g-map-tag">National Footprint &middot; 2006&ndash;2026</span>
+                <span class="g-map-count" id="growthMapCount">12 centres</span>
+              </div>
+              <div class="map" id="map">
+                <svg viewBox="0 0 400 300" id="mapSvg" aria-hidden="true"></svg>
+                <span class="cap" id="mapCap">Schematic footprint &middot; 7 states</span>
+              </div>
+              <div class="growth-spotlight" id="growthSpotlight">
+                <span class="g-spot-kicker" id="gSpotKicker">20-Year Growth</span>
+                <h4 id="gSpotTitle">From Awolowo Road to across Nigeria</h4>
+                <p id="gSpotDesc">What began at LOTUS House in Ikoyi has expanded into commercial hubs across Kano, Kaduna, Niger, Kwara, Rivers, Ogun, and Lagos.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div></div>
     </section>
@@ -248,7 +376,13 @@
             <p class="fnote">Notes appear on the wall once our team approves them.</p>
           </form>
           <div class="wall-side">
-            <div class="wall-head"><b id="wallCount">The wall</b><button class="mini-btn" id="wallRefresh" type="button">Refresh</button></div>
+            <div class="wall-head">
+              <b id="wallCount">The wall</b>
+              <div style="display:flex;align-items:center;gap:6px">
+                <button class="mini-btn" id="wallRefresh" type="button">Refresh</button>
+                <a href="/admin" class="mini-btn" title="Open Moderation Desk" target="_blank" rel="noopener">Admin</a>
+              </div>
+            </div>
             <div id="wallBody"></div>
           </div>
         </div>
@@ -276,7 +410,11 @@
       <div class="page-inner"><div class="wrap">
         <div class="sec-title"><h2>The <em>leader</em>board</h2><span class="tag" id="lbMode">Top 10 LOTUSIANS</span></div>
         <div class="lb box" id="lb"></div>
-        <div class="lb-actions"><button class="btn" id="lbPlay" type="button">Take the quiz &rarr;</button><button class="btn ghost" id="lbRefresh" type="button">Refresh</button></div>
+        <div class="lb-actions">
+          <button class="btn" id="lbPlay" type="button">Take the quiz &rarr;</button>
+          <button class="btn ghost" id="lbRefresh" type="button">Refresh</button>
+          <a href="/admin" class="btn ghost sm" title="Open Admin Leaderboard Desk" target="_blank" rel="noopener" style="margin-left:auto">Moderation Desk &rarr;</a>
+        </div>
       </div></div>
     </section>
 
@@ -413,10 +551,206 @@
     <div class="wipe" id="wipe" aria-hidden="true"></div>
 
     <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Chapters">
-      <div class="menu-head"><h2>All <em>chapters</em></h2><button class="menu-x" id="menuX" aria-label="Close chapters">&times;</button></div>
+      <div class="menu-head">
+        <h2>All <em>chapters</em></h2>
+        <div class="menu-head-actions">
+          <button class="menu-badges-trigger" id="menuBadgesTrigger" type="button">🏆 Badges (<span id="menuBadgeCount">0/10</span>)</button>
+          <button class="menu-x" id="menuX" aria-label="Close chapters">&times;</button>
+        </div>
+      </div>
       <div class="mgrid" id="mgrid"></div>
     </div>
+
+    <!-- Milestones & Badges Overlay Panel -->
+    <div class="badges-overlay" id="badgesOverlay" role="dialog" aria-modal="true" aria-labelledby="badgesTitle" hidden>
+      <div class="badges-modal">
+        <div class="badges-header">
+          <div class="badges-title-wrap">
+            <div class="badges-kicker">LOTUS@20 &middot; Commemorative Exhibition</div>
+            <h2 id="badgesTitle">Milestones &amp; <em>Badges</em></h2>
+            <p class="badges-sub">Earn commemorative badges as you explore 20 years of pioneering halal finance in Nigeria.</p>
+          </div>
+          <button class="badges-close" id="badgesCloseBtn" type="button" aria-label="Close Milestones &amp; Badges overlay">&times;</button>
+        </div>
+
+        <div class="badges-summary">
+          <div class="badges-level-box">
+            <div class="badges-level-icon" id="badgesLevelIcon">🏆</div>
+            <div class="badges-level-info">
+              <span class="badges-level-tag" id="badgesLevelTag">Rank: Bronze Visitor</span>
+              <strong class="badges-level-title" id="badgesLevelTitle">0 of 10 Milestones Unlocked</strong>
+            </div>
+          </div>
+          <div class="badges-meter-box">
+            <div class="badges-meter-label">
+              <span>Overall Completion</span>
+              <strong id="badgesMeterPct">0%</strong>
+            </div>
+            <div class="badges-meter-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+              <div class="badges-meter-fill" id="badgesMeterFill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="badges-toolbar">
+          <div class="badges-filters" role="tablist" aria-label="Filter badges">
+            <button class="badges-filter on" data-filter="all" role="tab" aria-selected="true">All (<span id="filterAllCount">10</span>)</button>
+            <button class="badges-filter" data-filter="unlocked" role="tab" aria-selected="false">Unlocked (<span id="filterUnlockedCount">0</span>)</button>
+            <button class="badges-filter" data-filter="locked" role="tab" aria-selected="false">Locked (<span id="filterLockedCount">10</span>)</button>
+          </div>
+          <div class="badges-toolbar-right">
+            <button class="btn ghost sm" id="shareBadgesBtn" type="button" title="Share your exhibition badges">Share Badges</button>
+          </div>
+        </div>
+
+        <div class="badges-grid" id="badgesGrid" tabindex="0" aria-label="Milestones and badges grid">
+          <!-- Dynamically populated badge cards -->
+        </div>
+      </div>
+    </div>
   </main>
+
+  <!-- Mobile Side Menu Drawer & Backdrop (Houses all nav header items for clean, uncongested mobile view) -->
+  <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" aria-hidden="true"></div>
+  <aside class="mobile-drawer" id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Exhibition navigation menu" aria-hidden="true">
+    <div class="mobile-drawer-inner">
+      <!-- Drawer Header -->
+      <div class="mobile-drawer-header">
+        <div class="mobile-drawer-brand">
+          <img src="/images/20TH%20LOGO.png" alt="LOTUS Capital 20th Anniversary" class="mobile-drawer-logo">
+          <div class="mobile-drawer-tagline">20 Years of Halal Finance &middot; 2006&ndash;2026</div>
+        </div>
+        <button class="mobile-drawer-close" id="mobileDrawerClose" type="button" aria-label="Close navigation menu">&times;</button>
+      </div>
+
+      <!-- Current Chapter & Exhibition Progress Card -->
+      <div class="mobile-drawer-status-card" id="mobileDrawerStatusCard">
+        <div class="mobile-drawer-status-kicker">Current Exhibition Chapter</div>
+        <div class="mobile-drawer-status-chapter" id="mobileDrawerChap">Welcome</div>
+        <div class="mobile-drawer-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="mobile-drawer-progress-fill" id="mobileDrawerProgressFill" style="width: 0%"></div>
+        </div>
+        <div class="mobile-drawer-progress-labels">
+          <span id="mobileDrawerProgressText">0% completed</span>
+          <span id="mobileDrawerChapterCount">Ch 01 / 12</span>
+        </div>
+      </div>
+
+      <!-- Drawer Action Items (All nav header items housed cleanly) -->
+      <div class="mobile-drawer-actions">
+        <!-- 1. All Chapters & Exhibits -->
+        <button class="mobile-drawer-item mobile-drawer-item-chapters" id="mobileDrawerChaptersBtn" type="button">
+          <div class="mobile-drawer-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </div>
+          <div class="mobile-drawer-item-info">
+            <strong>All Chapters &amp; Exhibits</strong>
+            <span>Browse complete exhibition index</span>
+          </div>
+          <span class="mobile-drawer-item-arrow" aria-hidden="true">&rarr;</span>
+        </button>
+
+        <!-- 2. Badges & Milestones -->
+        <button class="mobile-drawer-item mobile-drawer-item-badges" id="mobileDrawerBadgesBtn" type="button">
+          <div class="mobile-drawer-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"></circle>
+              <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+            </svg>
+          </div>
+          <div class="mobile-drawer-item-info">
+            <div class="mobile-drawer-item-title-row">
+              <strong>Commemorative Badges</strong>
+              <span class="mobile-drawer-badge-pill" id="mobileDrawerBadgeCount">0/10</span>
+            </div>
+            <span id="mobileDrawerBadgeRank">Rank: Bronze Visitor &middot; Tap to view</span>
+          </div>
+          <span class="mobile-drawer-item-arrow" aria-hidden="true">&rarr;</span>
+        </button>
+
+        <!-- 3. Ambient Sound & Narration Toggle -->
+        <button class="mobile-drawer-item mobile-drawer-item-audio" id="mobileDrawerAudioBtn" type="button" aria-pressed="false">
+          <div class="mobile-drawer-item-icon" id="mobileDrawerAudioIcon" aria-hidden="true">
+            <svg class="audio-svg-muted" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+            <svg class="audio-svg-playing" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            </svg>
+          </div>
+          <div class="mobile-drawer-item-info">
+            <div class="mobile-drawer-item-title-row">
+              <strong>Ambient Sound &amp; Voiceover</strong>
+              <span class="mobile-drawer-audio-tag" id="mobileDrawerAudioStatus">Muted</span>
+            </div>
+            <span>Atmospheric chimes &amp; narration</span>
+          </div>
+          <div class="mobile-drawer-switch" aria-hidden="true">
+            <span class="mobile-drawer-switch-knob"></span>
+          </div>
+        </button>
+
+        <!-- 4. Share Exhibition -->
+        <button class="mobile-drawer-item mobile-drawer-item-share" id="mobileDrawerShareBtn" type="button">
+          <div class="mobile-drawer-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </div>
+          <div class="mobile-drawer-item-info">
+            <strong>Share Milestone</strong>
+            <span>Send exhibition to colleagues &amp; friends</span>
+          </div>
+          <span class="mobile-drawer-item-arrow" aria-hidden="true">&rarr;</span>
+        </button>
+
+        <!-- 5. Return to Welcome Screen -->
+        <button class="mobile-drawer-item mobile-drawer-item-home" id="mobileDrawerHomeBtn" type="button">
+          <div class="mobile-drawer-item-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </div>
+          <div class="mobile-drawer-item-info">
+            <strong>Welcome Screen</strong>
+            <span>Return to exhibition cover</span>
+          </div>
+          <span class="mobile-drawer-item-arrow" aria-hidden="true">&rarr;</span>
+        </button>
+      </div>
+
+      <!-- Quick Chapter Jump Section inside Drawer -->
+      <div class="mobile-drawer-quick-sec">
+        <div class="mobile-drawer-sec-header">
+          <span class="mobile-drawer-sec-label">Quick Jump to Chapter</span>
+          <span class="mobile-drawer-sec-count">12 Chapters</span>
+        </div>
+        <div class="mobile-drawer-chips-grid" id="mobileDrawerChaptersList" role="list">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="mobile-drawer-footer">
+        <div class="mobile-drawer-footer-title">LOTUS Capital &middot; 2006&ndash;2026</div>
+        <div class="mobile-drawer-footer-desc">Halal Asset Management &middot; Ethical Wealth Creation</div>
+        <div style="margin-top:8px"><a href="/admin" class="btn sm" style="text-decoration:none;font-size:.7rem;padding:5px 10px;background:var(--white)" target="_blank" rel="noopener">&#x1F512; Moderation Desk &rarr;</a></div>
+      </div>
+    </div>
+  </aside>
 
   <nav class="bottombar" id="bottombar" aria-label="Unified exhibition navigation">
     <div class="nav-left">
@@ -461,7 +795,57 @@
       <button class="btn sm" id="fwd" aria-label="Next"><span class="next-lbl" id="nextLbl">Next: The timeline</span> <span class="arr">&rarr;</span></button>
     </div>
   </nav>
+  <!-- Floating PWA Mobile Install Prompt -->
+  <aside class="pwa-float-container" id="pwaFloatContainer" aria-label="App installation" hidden>
+    <button class="pwa-float-btn" id="pwaInstallBtn" type="button" aria-label="Install LOTUS@20 App on your device">
+      <span class="pwa-btn-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      </span>
+      <span class="pwa-btn-text">
+        <strong>Install LOTUS@20</strong>
+        <small>Add to Home Screen</small>
+      </span>
+      <span class="pwa-btn-badge">PWA</span>
+    </button>
+    <button class="pwa-float-close" id="pwaDismissBtn" type="button" aria-label="Dismiss app install button">&times;</button>
+  </aside>
+
+  <!-- iOS Safari Instructions Modal Sheet -->
+  <div class="pwa-ios-sheet" id="pwaIosSheet" role="dialog" aria-modal="true" aria-labelledby="pwaIosTitle" hidden>
+    <div class="pwa-ios-content">
+      <div class="pwa-ios-header">
+        <strong id="pwaIosTitle">Install LOTUS@20 on your iPhone</strong>
+        <button type="button" class="pwa-ios-close" id="pwaIosClose" aria-label="Close installation instructions">&times;</button>
+      </div>
+      <p style="margin:0 0 10px;font-size:.85rem;color:var(--ink-soft)">Add to your home screen for instant fullscreen access:</p>
+      <ol class="pwa-ios-steps">
+        <li>Tap the <strong>Share</strong> button <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline;vertical-align:-3px;margin:0 2px"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg> in Safari.</li>
+        <li>Scroll down the share sheet and tap <strong>Add to Home Screen</strong> <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" style="display:inline;vertical-align:-3px;margin:0 2px"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>.</li>
+        <li>Tap <strong>Add</strong> in the top-right corner to finish.</li>
+      </ol>
+      <button class="btn dark sm" id="pwaIosGotIt" style="width:100%;margin-top:12px">Got it &rarr;</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+
+  <!-- Badge Celebration Toast -->
+  <div class="badge-toast" id="badgeToast" role="alert" aria-live="polite" hidden>
+    <div class="badge-toast-content">
+      <div class="badge-toast-icon" id="badgeToastIcon" aria-hidden="true">🏆</div>
+      <div class="badge-toast-body">
+        <span class="badge-toast-kicker">Milestone Unlocked!</span>
+        <strong class="badge-toast-title" id="badgeToastTitle">History Explorer</strong>
+        <p class="badge-toast-desc" id="badgeToastDesc">You've explored all 20 years of the LOTUS timeline.</p>
+      </div>
+      <button class="btn dark sm badge-toast-cta" id="badgeToastCta" type="button">View Badges &rarr;</button>
+      <button class="badge-toast-close" id="badgeToastClose" type="button" aria-label="Close notification">&times;</button>
+    </div>
+  </div>
 </div>
 
 <script type="module" src="/src/app.js"></script>

@@ -327,6 +327,174 @@
 
   var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ==========================================================================
+     LOTUS@20 Milestones & Digital Badges System - State & Storage
+     ========================================================================== */
+  var BADGES_STORAGE_KEY = 'lotus20:badges_unlocked';
+  var PROGRESS_STORAGE_KEY = 'lotus20:badges_progress';
+
+  var BADGES_CONFIG = [
+    {
+      id: 'history_explorer',
+      title: 'History Explorer',
+      tagline: 'Chronicles of 20 Years',
+      cat: 'History · Chapter 01',
+      desc: 'Explore all 20 timeline milestones (2004–2026) depicting the foundational journey of LOTUS Capital.',
+      icon: '🧭',
+      goto: 'timeline',
+      target: 20,
+      unit: 'milestones'
+    },
+    {
+      id: 'pioneering_spirit',
+      title: 'Pioneering Spirit',
+      tagline: 'Industry Trailblazer',
+      cat: 'Firsts · Chapter 02',
+      desc: 'Discover all 20 historical firsts and industry records pioneered by LOTUS in Nigeria.',
+      icon: '⚡',
+      goto: 'firsts',
+      target: 20,
+      unit: 'records'
+    },
+    {
+      id: 'numbers_master',
+      title: 'Master of Numbers',
+      tagline: 'Financial Stature',
+      cat: 'Funds · Chapter 03',
+      desc: 'Inspect the 20 fund facts, assets under management, and financial milestones across 20 years.',
+      icon: '📈',
+      goto: 'facts',
+      target: 20,
+      unit: 'facts'
+    },
+    {
+      id: 'impact_advocate',
+      title: 'Real-World Impact',
+      tagline: 'Beyond Financial Returns',
+      cat: 'Impact · Chapter 04',
+      desc: 'Discover 20 societal impact stories from roads and infrastructure to clean water and education.',
+      icon: '🌱',
+      goto: 'impact20',
+      target: 20,
+      unit: 'stories'
+    },
+    {
+      id: 'halal_guardian',
+      title: 'Halal Integrity Guardian',
+      tagline: 'Ethical Screening Standards',
+      cat: 'Integrity · Chapter 05',
+      desc: 'Examine the 20 rigorous Shari\'ah governance and non-interest finance principles.',
+      icon: '⚖️',
+      goto: 'halal20',
+      target: 20,
+      unit: 'principles'
+    },
+    {
+      id: 'voices_lotus',
+      title: 'Voices of LOTUS',
+      tagline: 'Leadership & Vision',
+      cat: 'People · Chapter 06',
+      desc: 'Read founder Hajara Adeola\'s story and meet the key personalities who shaped two decades.',
+      icon: '🎙️',
+      goto: 'founder',
+      target: 5,
+      unit: 'profiles'
+    },
+    {
+      id: 'nationwide_footprint',
+      title: 'Nationwide Footprint',
+      tagline: 'Across All Geo-Zones',
+      cat: 'Presence · Chapter 08',
+      desc: 'Explore LOTUS\'s branch network growth from a single Ikoyi desk to 12 locations across Nigeria.',
+      icon: '📍',
+      goto: 'offices',
+      target: 1,
+      unit: 'network'
+    },
+    {
+      id: 'halal_scholar',
+      title: 'Halal Finance Scholar',
+      tagline: 'Knowledge Certified',
+      cat: 'Challenge · Chapter 10',
+      desc: 'Complete the 20-question LOTUS@20 interactive challenge testing your Islamic finance know-how.',
+      icon: '🎓',
+      goto: 'quiz',
+      target: 1,
+      unit: 'challenge'
+    },
+    {
+      id: 'sonic_traveler',
+      title: 'Sonic Immersion',
+      tagline: 'Tuned to the Story',
+      cat: 'Experience',
+      desc: 'Experience the retrospective with ambient soundscapes and authentic Nigerian female voice narration.',
+      icon: '🎵',
+      goto: 'welcome',
+      target: 1,
+      unit: 'narration'
+    },
+    {
+      id: 'grand_centurion',
+      title: 'LOTUS@20 Grand Champion',
+      tagline: 'Pinnacle Commemorative Award',
+      cat: 'Master Award',
+      desc: 'Unlock all 9 milestone badges across the commemorative retrospective to achieve master status.',
+      icon: '🏆',
+      goto: 'finale',
+      target: 9,
+      unit: 'badges'
+    }
+  ];
+
+  var unlockedBadges = {};
+  try {
+    var rawBadges = localStorage.getItem(BADGES_STORAGE_KEY);
+    if(rawBadges) unlockedBadges = JSON.parse(rawBadges) || {};
+  } catch(e){}
+  if(!unlockedBadges || typeof unlockedBadges !== 'object') unlockedBadges = {};
+
+  var progressTracker = {
+    timeline: {},
+    firsts: {},
+    facts: {},
+    impact20: {},
+    halal20: {},
+    people20: {},
+    pages: {},
+    quizDone: false,
+    soundActive: false
+  };
+  try {
+    var rawProg = localStorage.getItem(PROGRESS_STORAGE_KEY);
+    if(rawProg) {
+      var pObj = JSON.parse(rawProg);
+      if(pObj && typeof pObj === 'object') {
+        Object.keys(pObj).forEach(function(k){
+          if(typeof pObj[k] === 'object' && pObj[k] !== null){
+            progressTracker[k] = Object.assign(progressTracker[k] || {}, pObj[k]);
+          } else {
+            progressTracker[k] = pObj[k];
+          }
+        });
+      }
+    }
+  } catch(e){}
+
+  if(!progressTracker.timeline) progressTracker.timeline = {};
+  if(!progressTracker.firsts) progressTracker.firsts = {};
+  if(!progressTracker.facts) progressTracker.facts = {};
+  if(!progressTracker.impact20) progressTracker.impact20 = {};
+  if(!progressTracker.halal20) progressTracker.halal20 = {};
+  if(!progressTracker.people20) progressTracker.people20 = {};
+  if(!progressTracker.pages) progressTracker.pages = {};
+
+  function saveBadgesStorage(){
+    try {
+      localStorage.setItem(BADGES_STORAGE_KEY, JSON.stringify(unlockedBadges));
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(progressTracker));
+    } catch(e){}
+  }
+
   /* ---------- safe DOM helpers ---------- */
   function safeClosest(target, selector){
     if(!target) return null;
@@ -468,6 +636,8 @@
     if(range){range.value=i;range.style.setProperty('--fill',(i/(N-1)*100)+'%');}
     if(marks){Array.prototype.forEach.call(marks.children,function(b,k){b.classList.toggle('on',k===ev.e);});}
     if(typeof updateChrome==='function'&&cur>=0)updateChrome(cur);
+    if(typeof onCardAudioTrigger==='function')onCardAudioTrigger();
+    if(typeof recordTimelineCard==='function')recordTimelineCard(i);
   });
   if(range)range.addEventListener('input',function(){stopPlay();tl.go(+range.value);});
   var prevBtn=document.getElementById('prev');if(prevBtn)prevBtn.addEventListener('click',function(){stopPlay();tl.step(-1);});
@@ -564,6 +734,8 @@
       if(cnt)cnt.textContent=String(i+1).padStart(2,'0')+' / '+items.length;
       if(rng){rng.value=i;rng.style.setProperty('--fill',(i/(items.length-1)*100)+'%');}
       if(typeof updateChrome==='function'&&cur>=0)updateChrome(cur);
+      if(typeof onCardAudioTrigger==='function')onCardAudioTrigger();
+      if(typeof recordTwentyCard==='function')recordTwentyCard(pid, i);
     });
     if(rng)rng.addEventListener('input',function(){C.go(+rng.value);});
     CAR[pid]=C;return C;
@@ -644,38 +816,200 @@
   }
   selTerm(1);
 
-  /* ---------- locations ---------- */
+  /* ---------- Nationwide Growth Story (2006–2026) ---------- */
   var NG=[[2.70,6.37],[2.72,9.0],[3.6,10.3],[3.6,11.7],[4.1,13.5],[5.5,13.9],[6.9,13.2],[8.1,13.3],[9.6,12.8],[11.2,13.4],[12.5,13.1],[13.6,13.7],[14.2,13.1],[14.6,12.0],[14.2,11.2],[13.3,10.0],[13.1,9.0],[12.5,8.6],[11.9,7.1],[11.1,6.5],[10.6,7.1],[9.7,6.5],[8.9,5.0],[8.5,4.6],[7.1,4.4],[6.0,4.3],[5.4,5.2],[4.8,6.3],[3.4,6.4]];
   function proj(lon,lat){return [20+(lon-2.6)/(14.8-2.6)*360,20+(13.95-lat)/(13.95-4.2)*260];}
-  var mapSvg=document.getElementById('mapSvg'),mapEl=document.getElementById('map'),officeEl=document.getElementById('office'),chipsEl=document.getElementById('locChips');
-  var poly=NG.map(function(c){var q=proj(c[0],c[1]);return q[0].toFixed(1)+','+q[1].toFixed(1);}).join(' ');
-  mapSvg.innerHTML='<polygon points="'+poly+'" fill="#FFFFFF" stroke="#111" stroke-width="3" stroke-linejoin="round"/>'+
-    '<g transform="translate(360,40)"><circle r="16" fill="#FFFFFF" stroke="#111" stroke-width="3"/><path d="M0 -10 L6 6 L0 2 L-6 6Z" fill="#111"/></g>'+
-    '<text x="360" y="72" text-anchor="middle" font-family="Space Mono, monospace" font-weight="700" font-size="12" fill="#111">N</text>';
-  var CITY={},cityOrder=[];
-  LOCS.forEach(function(l,i){var key=l.c==='Lagos'?'Lagos':l.n;if(!CITY[key]){CITY[key]={name:key==='Lagos'?'Lagos':l.n.replace(' Office',''),lon:l.c==='Lagos'?3.40:l.lon,lat:l.c==='Lagos'?6.50:l.lat,idx:[]};cityOrder.push(key);}CITY[key].idx.push(i);});
-  var pins={},locBtns=[],li=0;
-  cityOrder.forEach(function(k){
-    var cy=CITY[k],q=proj(cy.lon,cy.lat),b=document.createElement('button');b.className='pin';b.setAttribute('aria-label',cy.name+(cy.idx.length>1?' ('+cy.idx.length+' locations)':''));
-    b.style.left=(q[0]/400*100)+'%';b.style.top=(q[1]/300*100)+'%';
-    b.innerHTML='<span class="dot">'+(cy.idx.length>1?'<i>'+cy.idx.length+'</i>':'')+'</span><span class="nm">'+cy.name+'</span>';
-    b.addEventListener('click',function(){selLoc(cy.idx[0]);});mapEl.appendChild(b);pins[k]=b;
-  });
-  LOCS.forEach(function(l,i){var b=document.createElement('button');b.className='lchip';b.textContent=l.n;b.addEventListener('click',function(){selLoc(i);});chipsEl.appendChild(b);locBtns.push(b);});
-  function selLoc(i){
-    li=(i+LOCS.length)%LOCS.length;var l=LOCS[li],key=l.c==='Lagos'?'Lagos':l.n;
-    Object.keys(pins).forEach(function(k){pins[k].setAttribute('aria-pressed',k===key?'true':'false');});
-    locBtns.forEach(function(b,j){b.setAttribute('aria-pressed',j===li?'true':'false');});
-    var ph=l.t.split(',').map(function(x){return '<span>'+x.trim()+'</span>';}).join('');
-    var photoHtml=l.hq?'<img src="/images/designer-1.png" alt="LOTUS House, Ikoyi" class="off-photo">':'';
-    officeEl.innerHTML=photoHtml+'<div class="off-top"><span class="lbl">'+l.k+' &middot; '+l.c+'</span><span class="off-n">'+String(li+1).padStart(2,'0')+' / '+LOCS.length+'</span></div>'+
-      '<h3>'+l.n+'</h3><p>'+l.a+'</p><div class="phones"><b>Call</b>'+ph+'</div>'+
-      '<div class="off-actions">'+(l.u?'<a class="btn sm" href="'+l.u+'" target="_blank" rel="noopener">Get directions &#8599;</a>':'<span class="soon">Directions link coming soon</span>')+
-      '<span class="off-nav"><button aria-label="Previous location">&larr;</button><button aria-label="Next location">&rarr;</button></span></div>';
-    var nb=officeEl.querySelectorAll('.off-nav button');nb[0].addEventListener('click',function(){selLoc(li-1);});nb[1].addEventListener('click',function(){selLoc(li+1);});
-    officeEl.classList.remove('swap');void officeEl.offsetWidth;officeEl.classList.add('swap');
+  var mapSvg=document.getElementById('mapSvg'),mapEl=document.getElementById('map');
+  if(mapSvg){
+    var poly=NG.map(function(c){var q=proj(c[0],c[1]);return q[0].toFixed(1)+','+q[1].toFixed(1);}).join(' ');
+    mapSvg.innerHTML='<polygon points="'+poly+'" fill="#FFFFFF" stroke="#111" stroke-width="3" stroke-linejoin="round"/>'+
+      '<g transform="translate(360,40)"><circle r="16" fill="#FFFFFF" stroke="#111" stroke-width="3"/><path d="M0 -10 L6 6 L0 2 L-6 6Z" fill="#111"/></g>'+
+      '<text x="360" y="72" text-anchor="middle" font-family="Space Mono, monospace" font-weight="700" font-size="12" fill="#111">N</text>';
   }
-  selLoc(0);
+
+  var GROWTH_STAGES=[
+    {
+      id:'origin',
+      phase:'origin',
+      era:'2006 · The Seed',
+      title:'The Starting Line at Falomo, Ikoyi',
+      tag:'Head Office · Lagos State',
+      desc:'When LOTUS Capital received its SEC licence in 2006, non-interest finance in Nigeria was uncharted territory. Operating from LOTUS House on Awolowo Road, the founding team laid the regulatory and institutional foundation for the entire halal capital market in West Africa.',
+      reach:'1 Location · 1 State (Lagos)',
+      cities:['Lagos'],
+      spotTitle:'LOTUS House, Ikoyi (HQ)',
+      spotDesc:'The birthplace of regulated Islamic finance in Nigeria. From here, the team drafted fund structures, advised governments, and launched Nigeria\'s first halal mutual fund.'
+    },
+    {
+      id:'north',
+      phase:'north',
+      era:'Commercial Hubs',
+      title:'Northern Corridors: Kano & Kaduna',
+      tag:'North & Northwest Expansion',
+      desc:'To connect with Nigeria\'s historic trading heartlands, LOTUS established regional hubs along Murtala Mohammed Way in Kano and Ahmadu Bello Way in Kaduna. This anchored private wealth and institutional capital, building the investor trust that later powered the FGN Sovereign Sukuk issues.',
+      reach:'2 Key Northern Centres · Kano & Kaduna States',
+      cities:['Kano','Kaduna'],
+      spotTitle:'Kano & Kaduna Corridors',
+      spotDesc:'Anchoring non-interest capital in Northern commercial powerhouses, giving thousands of families and business owners direct access to regulated halal funds.'
+    },
+    {
+      id:'belt',
+      phase:'belt',
+      era:'National Bridge',
+      title:'Connecting the Middle Belt & Niger Delta',
+      tag:'Rivers, Niger & Kwara States',
+      desc:'Expansion extended across regional resource and administrative hubs: Port Harcourt along Aba Road in Rivers State, Minna in partnership with the Islamic Education Trust in Niger State, and Ilorin in Kwara State. This connected civil servants, educators, and oil & gas professionals.',
+      reach:'3 Strategic Centres · Rivers, Niger & Kwara',
+      cities:['Port Harcourt','Minna','Ilorin'],
+      spotTitle:'Rivers, Niger & Kwara',
+      spotDesc:'Expanding beyond commercial megacities to serve universities, public servants, and enterprise leaders seeking interest-free capital management.'
+    },
+    {
+      id:'retail',
+      phase:'retail',
+      era:'Grassroots Reach',
+      title:'Community Touchpoints & Retail Wealth',
+      tag:'Decentralized Service Centres',
+      desc:'To bring halal investing within walking distance of everyday people, LOTUS opened community service hubs across high-traffic commerce nodes in Lagos (Ikeja, Surulere, Egbeda, Ikorodu) and Ogun State (Abeokuta, Ijebu-Ode). Paired with the LOTUS Tribe mobile app, 30,900+ unit-holders now invest with ease.',
+      reach:'6 Community Centres · Lagos & Ogun States',
+      cities:['Lagos','Abeokuta','Ijebu-Ode'],
+      spotTitle:'Community Touchpoints',
+      spotDesc:'Physical service centres embedded in major commercial markets, pairing human guidance with digital apps so everyday savers can build wealth ethically.'
+    }
+  ];
+
+  var CITY={},cityOrder=[];
+  LOCS.forEach(function(l,i){
+    var key=l.c==='Lagos'?'Lagos':(l.c==='Ogun'?l.n:l.c);
+    if(!CITY[key]){
+      CITY[key]={name:key,lon:l.c==='Lagos'?3.40:l.lon,lat:l.c==='Lagos'?6.50:l.lat,count:0};
+      cityOrder.push(key);
+    }
+    CITY[key].count++;
+  });
+
+  var pins={};
+  if(mapEl){
+    cityOrder.forEach(function(k){
+      var cy=CITY[k],q=proj(cy.lon,cy.lat),b=document.createElement('button');
+      b.className='pin';b.setAttribute('aria-label',cy.name+' ('+cy.count+' locations)');
+      b.style.left=(q[0]/400*100)+'%';b.style.top=(q[1]/300*100)+'%';
+      b.innerHTML='<span class="dot">'+(cy.count>1?'<i>'+cy.count+'</i>':'')+'</span><span class="nm">'+cy.name+'</span>';
+      b.addEventListener('click',function(){
+        // Find matching growth stage
+        var matchStageIdx=0;
+        if(k==='Kano'||k==='Kaduna') matchStageIdx=1;
+        else if(k==='Rivers'||k==='Niger'||k==='Kwara'||k==='Port Harcourt'||k==='Minna'||k==='Ilorin') matchStageIdx=2;
+        else if(k==='Abeokuta'||k==='Ijebu-Ode'||k==='Ogun') matchStageIdx=3;
+        selectGrowthStage(matchStageIdx);
+      });
+      mapEl.appendChild(b);pins[k]=b;
+    });
+  }
+
+  var growthCardsEl=document.getElementById('growthCards');
+  var growthTabsEl=document.getElementById('growthTabs');
+  var gSpotKicker=document.getElementById('gSpotKicker');
+  var gSpotTitle=document.getElementById('gSpotTitle');
+  var gSpotDesc=document.getElementById('gSpotDesc');
+  var growthMapCount=document.getElementById('growthMapCount');
+  var mapCap=document.getElementById('mapCap');
+  var activeCardIdx=0;
+
+  function renderGrowthCards(filterPhase){
+    if(!growthCardsEl) return;
+    var filtered=(filterPhase==='all')?GROWTH_STAGES:GROWTH_STAGES.filter(function(s){return s.phase===filterPhase;});
+    growthCardsEl.innerHTML=filtered.map(function(s){
+      var fullIdx=GROWTH_STAGES.indexOf(s);
+      var isAct=(fullIdx===activeCardIdx);
+      return '<article class="g-card'+(isAct?' active':'')+'" data-idx="'+fullIdx+'" tabindex="0" role="button" aria-pressed="'+(isAct?'true':'false')+'">'+
+        '<div class="g-card-top">'+
+          '<span class="g-card-era">'+s.era+'</span>'+
+          '<span class="g-card-tag">'+s.tag+'</span>'+
+        '</div>'+
+        '<h3>'+s.title+'</h3>'+
+        '<p>'+s.desc+'</p>'+
+        '<div class="g-card-reach">'+
+          '<span class="g-card-pill"><b>Footprint:</b> '+s.reach+'</span>'+
+        '</div>'+
+      '</article>';
+    }).join('');
+
+    growthCardsEl.querySelectorAll('.g-card').forEach(function(card){
+      card.addEventListener('click',function(){
+        var idx=+card.dataset.idx;
+        selectGrowthStage(idx);
+      });
+      card.addEventListener('keydown',function(e){
+        if(e.key==='Enter'||e.key===' '){
+          e.preventDefault();
+          selectGrowthStage(+card.dataset.idx);
+        }
+      });
+    });
+  }
+
+  function selectGrowthStage(idx){
+    activeCardIdx=idx;
+    var stage=GROWTH_STAGES[idx];
+    if(!stage) return;
+
+    if(growthCardsEl){
+      growthCardsEl.querySelectorAll('.g-card').forEach(function(c){
+        var isThis=+c.dataset.idx===idx;
+        c.classList.toggle('active',isThis);
+        c.setAttribute('aria-pressed',isThis?'true':'false');
+      });
+    }
+
+    if(gSpotKicker) gSpotKicker.textContent=stage.era;
+    if(gSpotTitle) gSpotTitle.textContent=stage.spotTitle;
+    if(gSpotDesc) gSpotDesc.textContent=stage.spotDesc;
+    if(growthMapCount) growthMapCount.textContent=stage.reach.split('·')[0].trim();
+    if(mapCap) mapCap.textContent=stage.reach;
+
+    highlightMapPins(stage.cities);
+
+    if(typeof isAudioActive!=='undefined'&&isAudioActive){
+      if(typeof playNavChime==='function') playNavChime(false);
+      if(typeof speakNarration==='function') speakNarration(stage.title+'. '+stage.spotTitle+': '+stage.spotDesc);
+    }
+  }
+
+  function highlightMapPins(citiesList){
+    Object.keys(pins).forEach(function(cityKey){
+      var shouldHighlight=!citiesList||citiesList.some(function(c){
+        return cityKey.toLowerCase().indexOf(c.toLowerCase())>=0 || c.toLowerCase().indexOf(cityKey.toLowerCase())>=0;
+      });
+      pins[cityKey].classList.toggle('highlight',shouldHighlight);
+      pins[cityKey].setAttribute('aria-pressed',shouldHighlight?'true':'false');
+    });
+  }
+
+  if(growthTabsEl){
+    growthTabsEl.querySelectorAll('.g-tab').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var ph=btn.dataset.phase;
+        growthTabsEl.querySelectorAll('.g-tab').forEach(function(b){
+          var isBtn=(b===btn);
+          b.classList.toggle('on',isBtn);
+          b.setAttribute('aria-selected',isBtn?'true':'false');
+        });
+        if(ph==='all'){
+          renderGrowthCards('all');
+          selectGrowthStage(0);
+          highlightMapPins(null);
+        } else {
+          var foundIdx=GROWTH_STAGES.findIndex(function(s){return s.phase===ph;});
+          renderGrowthCards(ph);
+          if(foundIdx>=0) selectGrowthStage(foundIdx);
+        }
+      });
+    });
+  }
+
+  renderGrowthCards('all');
+  selectGrowthStage(0);
 
   /* ---------- then & now ---------- */
   var tnEl=document.getElementById('tn');
@@ -703,8 +1037,8 @@
   selStory(0);
 
   /* ---------- backend (Supabase) ---------- */
-  var SUPABASE_URL='';
-  var SUPABASE_ANON_KEY='';
+  var SUPABASE_URL='https://phfvkmmlpwsnscnryrth.supabase.co';
+  var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoZnZrbW1scHdzbnNjbnJ5cnRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2NjMwMjEsImV4cCI6MjEwNjIzOTAyMX0.-KlxAF4UQCio5fS7liNTV0uFKyZrfDVi0Dqr-EvcoBU';
   var LIVE=!!(SUPABASE_URL&&SUPABASE_ANON_KEY);
   function sb(path,opt){
     opt=opt||{};
@@ -853,6 +1187,7 @@
   function finish(){
     if(tick){clearInterval(tick);tick=null;}
     var t=secs(),tier=tierFor(score);
+    if(typeof recordQuizFinished==='function')recordQuizFinished(score);
     if(!quizBox) return;
     quizBox.innerHTML=prog()+'<div class="qresult"><div class="qlabel">'+esc(qName)+', your score</div><div class="qscore">'+score+'/20</div><div class="qtier">'+tier+'</div><p>in '+fmtT(t)+'</p><div class="qrank" id="qRank">Saving your score…</div>'+
       '<div class="qactions"><button class="btn" id="qLb">See the leaderboard &rarr;</button><button class="btn ghost" id="qcopy">Copy my score</button><button class="btn ghost" id="qagain">Play again</button></div><div id="qcopyout"></div></div>';
@@ -984,6 +1319,13 @@
   var navPillBtn=document.getElementById('navPillBtn'),navPillTitle=document.getElementById('navPillTitle'),navPillSub=document.getElementById('navPillSub'),navPillBarFill=document.getElementById('navPillBarFill'),navPillPct=document.getElementById('navPillPct');
   var navPctBadge=document.getElementById('navPctBadge'),navPctNum=document.getElementById('navPctNum'),navPctLbl=document.getElementById('navPctLbl');
   var shareBtn=document.getElementById('shareBtn'),bottomShareBtn=document.getElementById('bottomShareBtn'),toastEl=document.getElementById('toast');
+  var audioBtn=document.getElementById('audioBtn'),audioIcon=document.getElementById('audioIcon'),audioLbl=document.getElementById('audioLbl'),audioBars=document.getElementById('audioBars');
+  var mobileNavToggle=document.getElementById('mobileNavToggle'),mobileNavToggleBadge=document.getElementById('mobileNavToggleBadge');
+  var mobileDrawer=document.getElementById('mobileDrawer'),mobileDrawerBackdrop=document.getElementById('mobileDrawerBackdrop'),mobileDrawerClose=document.getElementById('mobileDrawerClose');
+  var mobileDrawerChap=document.getElementById('mobileDrawerChap'),mobileDrawerProgressFill=document.getElementById('mobileDrawerProgressFill'),mobileDrawerProgressText=document.getElementById('mobileDrawerProgressText'),mobileDrawerChapterCount=document.getElementById('mobileDrawerChapterCount');
+  var mobileDrawerChaptersBtn=document.getElementById('mobileDrawerChaptersBtn'),mobileDrawerBadgesBtn=document.getElementById('mobileDrawerBadgesBtn'),mobileDrawerBadgeCount=document.getElementById('mobileDrawerBadgeCount'),mobileDrawerBadgeRank=document.getElementById('mobileDrawerBadgeRank');
+  var mobileDrawerAudioBtn=document.getElementById('mobileDrawerAudioBtn'),mobileDrawerAudioIcon=document.getElementById('mobileDrawerAudioIcon'),mobileDrawerAudioStatus=document.getElementById('mobileDrawerAudioStatus');
+  var mobileDrawerShareBtn=document.getElementById('mobileDrawerShareBtn'),mobileDrawerHomeBtn=document.getElementById('mobileDrawerHomeBtn'),mobileDrawerChaptersList=document.getElementById('mobileDrawerChaptersList');
   if(navPillBtn)navPillBtn.addEventListener('click',openMenu);
   var visited={},CHN=0,chStart={},chName={},chPages={};
   pages.forEach(function(pg,i){var c=+(pg.dataset.ch||0);if(!c)return;CHN=Math.max(CHN,c);if(pg.dataset.splash){chStart[c]=i;chName[c]=pg.dataset.name;}(chPages[c]=chPages[c]||[]).push(i);});
@@ -994,7 +1336,20 @@
     var m=document.createElement('button');m.className='mt';m.dataset.ch=c;
     var subs=(chPages[c]||[]).filter(function(i){return pages[i]&&!pages[i].dataset.splash;}).map(function(i){return pages[i].dataset.name;}).join(' · ');
     m.innerHTML='<span class="n">Chapter '+String(c).padStart(2,'0')+'</span><b>'+(chName[c]||'')+'</b><small>'+subs+'</small>';
-    m.addEventListener('click',function(){closeMenu();go(chStart[c]);});if(mgrid)mgrid.appendChild(m);
+    m.addEventListener('click',function(){closeMenu();closeMobileDrawer();go(chStart[c]);});if(mgrid)mgrid.appendChild(m);
+    if(mobileDrawerChaptersList){
+      var chip=document.createElement('button');
+      chip.type='button';
+      chip.className='mobile-drawer-ch-chip';
+      chip.dataset.ch=c;
+      chip.setAttribute('role', 'listitem');
+      chip.innerHTML='<span class="ch-chip-num">'+String(c).padStart(2,'0')+'</span><span class="ch-chip-name">'+(chName[c]||'')+'</span>';
+      chip.addEventListener('click',function(){
+        closeMobileDrawer();
+        go(chStart[c]);
+      });
+      mobileDrawerChaptersList.appendChild(chip);
+    }
   })(c);
   function pad(n){return String(n).padStart(2,'0');}
   function show(i,dir){
@@ -1018,6 +1373,8 @@
     if(id!=='timeline')stopPlay();
     if(id!=='quiz'&&tick){clearInterval(tick);tick=null;}
     updateChrome(i);
+    if(typeof onPageAudioTrigger==='function')onPageAudioTrigger(i);
+    if(typeof recordPageVisit==='function')recordPageVisit(id);
   }
   function updateChrome(i){
     if(!pages[i]) return;
@@ -1026,6 +1383,27 @@
     var pos=c?(chPages[c]||[]).indexOf(i)+1:0,tot=c?(chPages[c]||[]).length:0;
     if(chapN)chapN.textContent=c?(pos+' / '+tot):'';
     if(mcount)mcount.textContent=c?('Ch '+pad(c)+' / '+pad(CHN)):'Welcome';
+
+    // Sync mobile drawer status card & chapter chips
+    if(mobileDrawerChap){
+      mobileDrawerChap.textContent=c?('Ch '+pad(c)+' \u00b7 '+(chName[c]||'')):'Welcome & Introduction';
+    }
+    if(mobileDrawerChapterCount){
+      mobileDrawerChapterCount.textContent=c?('Ch '+pad(c)+' / '+pad(CHN)):'Cover';
+    }
+    var totalPages=pages.length;
+    var pctDone=Math.round((i/Math.max(1,totalPages-1))*100);
+    if(mobileDrawerProgressFill){
+      mobileDrawerProgressFill.style.width=pctDone+'%';
+    }
+    if(mobileDrawerProgressText){
+      mobileDrawerProgressText.textContent=pctDone+'% completed';
+    }
+    if(mobileDrawerChaptersList){
+      mobileDrawerChaptersList.querySelectorAll('.mobile-drawer-ch-chip').forEach(function(chip){
+        chip.classList.toggle('active', +(chip.dataset.ch||0)===c);
+      });
+    }
 
     var C=carouselFor(i);
     var fwdArr=fwdBtn?fwdBtn.querySelector('.arr'):null;
@@ -1279,6 +1657,7 @@
 
   function openMenu(){
     stopPlay();
+    closeMobileDrawer();
     if(menu){menu.classList.add('open');if(menuBtn)menuBtn.setAttribute('aria-expanded','true');var c=mgrid?mgrid.querySelector('.mt.cur')||mgrid.children[0]:null;if(c)c.focus({preventScroll:true});}
   }
   function closeMenu(){
@@ -1287,6 +1666,77 @@
   if(menuBtn)menuBtn.addEventListener('click',function(){menu&&menu.classList.contains('open')?closeMenu():openMenu();});
   var mx=document.getElementById('menuX');if(mx)mx.addEventListener('click',closeMenu);
   var om2=document.getElementById('openMenu2');if(om2)om2.addEventListener('click',openMenu);
+
+  function openMobileDrawer(){
+    stopPlay();
+    if(mobileDrawer){
+      mobileDrawer.classList.add('is-open');
+      mobileDrawer.setAttribute('aria-hidden', 'false');
+      if(mobileDrawerBackdrop) mobileDrawerBackdrop.classList.add('is-open');
+      if(mobileNavToggle){
+        mobileNavToggle.classList.add('is-open');
+        mobileNavToggle.setAttribute('aria-expanded', 'true');
+      }
+      document.body.classList.add('mobile-drawer-open');
+      if(mobileDrawerClose) mobileDrawerClose.focus({preventScroll:true});
+    }
+  }
+
+  function closeMobileDrawer(){
+    if(mobileDrawer){
+      mobileDrawer.classList.remove('is-open');
+      mobileDrawer.setAttribute('aria-hidden', 'true');
+      if(mobileDrawerBackdrop) mobileDrawerBackdrop.classList.remove('is-open');
+      if(mobileNavToggle){
+        mobileNavToggle.classList.remove('is-open');
+        mobileNavToggle.setAttribute('aria-expanded', 'false');
+      }
+      document.body.classList.remove('mobile-drawer-open');
+    }
+  }
+
+  if(mobileNavToggle){
+    mobileNavToggle.addEventListener('click', function(){
+      mobileDrawer && mobileDrawer.classList.contains('is-open') ? closeMobileDrawer() : openMobileDrawer();
+    });
+  }
+  if(mobileDrawerClose) mobileDrawerClose.addEventListener('click', closeMobileDrawer);
+  if(mobileDrawerBackdrop) mobileDrawerBackdrop.addEventListener('click', closeMobileDrawer);
+
+  if(mobileDrawerChaptersBtn){
+    mobileDrawerChaptersBtn.addEventListener('click', function(){
+      closeMobileDrawer();
+      openMenu();
+    });
+  }
+  if(mobileDrawerBadgesBtn){
+    mobileDrawerBadgesBtn.addEventListener('click', function(){
+      closeMobileDrawer();
+      openBadgesOverlay();
+    });
+  }
+  if(mobileDrawerAudioBtn){
+    mobileDrawerAudioBtn.addEventListener('click', function(){
+      setAudioActive(!isAudioActive, true);
+    });
+  }
+  if(mobileDrawerShareBtn){
+    mobileDrawerShareBtn.addEventListener('click', function(){
+      handleShare();
+    });
+  }
+  if(mobileDrawerHomeBtn){
+    mobileDrawerHomeBtn.addEventListener('click', function(){
+      closeMobileDrawer();
+      go(0);
+    });
+  }
+
+  window.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      if(mobileDrawer && mobileDrawer.classList.contains('is-open')) closeMobileDrawer();
+    }
+  });
 
   /* ---------- Web Share API & Clipboard Fallback ---------- */
   var toastTimer=null;
@@ -1341,6 +1791,9 @@
         title='LOTUS@20 Personality: '+it.n;
         text=it.n+' ('+it.r+') \u2014 '+it.p+' #LOTUS20';
       }
+    } else if(pageId==='offices'){
+      title='LOTUS@20 \u00b7 How Far We Have Grown';
+      text='From 1 desk at LOTUS House in Ikoyi to 12 locations across 7 states, managing over \u20A665bn for 30,900+ unit-holders across Nigeria. #LOTUS20 #HalalFinance';
     } else if(ch>0){
       title='LOTUS@20 \u00b7 Chapter '+pad(ch)+': '+chTitle;
       text='Exploring Chapter '+pad(ch)+' ('+chTitle+') in the 20-year journey of LOTUS Capital.';
@@ -1393,6 +1846,412 @@
   if(shareBtn)shareBtn.addEventListener('click',handleShare);
   if(bottomShareBtn)bottomShareBtn.addEventListener('click',handleShare);
 
+  var siteLogoBtn=document.getElementById('siteLogoBtn');
+  if(siteLogoBtn){
+    siteLogoBtn.addEventListener('click',function(e){
+      e.preventDefault();
+      if(typeof closeMenu==='function')closeMenu();
+      go(0);
+    });
+  }
+
+  /* ---------- Ambient Soundscape & Journey Narration (Web Audio API & Speech Synthesis) ---------- */
+  var audioCtx=null,masterGain=null,ambientGain=null,isAudioActive=false,ambientOscs=[],chimeTimer=null,narrateTimer=null;
+  var PENTATONIC=[523.25, 587.33, 659.25, 783.99, 880.00, 1046.50];
+
+  function initAudio(){
+    if(audioCtx) return;
+    try{
+      var AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC) return;
+      audioCtx=new AC();
+      masterGain=audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+      masterGain.connect(audioCtx.destination);
+      startAmbientSoundscape();
+    }catch(err){
+      console.warn('AudioContext not available:', err);
+    }
+  }
+
+  function startAmbientSoundscape(){
+    if(!audioCtx) return;
+    try{
+      var filter=audioCtx.createBiquadFilter();
+      filter.type='lowpass';
+      filter.frequency.setValueAtTime(640, audioCtx.currentTime);
+      filter.Q.setValueAtTime(1.8, audioCtx.currentTime);
+
+      var lfo=audioCtx.createOscillator();
+      var lfoGain=audioCtx.createGain();
+      lfo.frequency.setValueAtTime(0.08, audioCtx.currentTime);
+      lfoGain.gain.setValueAtTime(180, audioCtx.currentTime);
+      lfo.connect(filter.frequency);
+      lfo.start();
+
+      ambientGain=audioCtx.createGain();
+      ambientGain.gain.setValueAtTime(0.24, audioCtx.currentTime);
+      filter.connect(ambientGain);
+      ambientGain.connect(masterGain);
+
+      var chordFreqs=[146.83, 220.00, 293.66, 369.99, 440.00];
+      chordFreqs.forEach(function(f, idx){
+        var osc=audioCtx.createOscillator();
+        var vGain=audioCtx.createGain();
+        osc.type=(idx%2===0)?'sine':'triangle';
+        osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+        osc.detune.setValueAtTime((idx-2)*5, audioCtx.currentTime);
+        vGain.gain.setValueAtTime(0.18/chordFreqs.length, audioCtx.currentTime);
+        osc.connect(vGain);
+        vGain.connect(filter);
+        osc.start();
+        ambientOscs.push(osc);
+      });
+      scheduleNextChime();
+    }catch(e){}
+  }
+
+  function scheduleNextChime(){
+    if(!isAudioActive||!audioCtx) return;
+    if(chimeTimer)clearTimeout(chimeTimer);
+    var delay=4500+Math.random()*3500;
+    chimeTimer=setTimeout(function(){
+      if(!isAudioActive||!audioCtx) return;
+      playAmbientBell();
+      scheduleNextChime();
+    }, delay);
+  }
+
+  function playAmbientBell(){
+    if(!audioCtx||!isAudioActive||!masterGain) return;
+    try{
+      var note=PENTATONIC[Math.floor(Math.random()*PENTATONIC.length)];
+      var osc=audioCtx.createOscillator();
+      var g=audioCtx.createGain();
+      osc.type='sine';
+      osc.frequency.setValueAtTime(note, audioCtx.currentTime);
+      var now=audioCtx.currentTime;
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.linearRampToValueAtTime(0.06, now+0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, now+1.8);
+      osc.connect(g);
+      g.connect(masterGain);
+      osc.start(now);
+      osc.stop(now+1.85);
+    }catch(e){}
+  }
+
+  function playNavChime(isChapter){
+    if(!audioCtx||!isAudioActive||!masterGain) return;
+    try{
+      var now=audioCtx.currentTime;
+      if(isChapter){
+        [392.00, 523.25].forEach(function(freq, idx){
+          var osc=audioCtx.createOscillator();
+          var g=audioCtx.createGain();
+          osc.type='sine';
+          osc.frequency.setValueAtTime(freq, now+idx*0.09);
+          g.gain.setValueAtTime(0.001, now+idx*0.09);
+          g.gain.linearRampToValueAtTime(0.08, now+idx*0.09+0.02);
+          g.gain.exponentialRampToValueAtTime(0.001, now+idx*0.09+0.38);
+          osc.connect(g);
+          g.connect(masterGain);
+          osc.start(now+idx*0.09);
+          osc.stop(now+idx*0.09+0.4);
+        });
+      } else {
+        var osc=audioCtx.createOscillator();
+        var g=audioCtx.createGain();
+        osc.type='sine';
+        osc.frequency.setValueAtTime(659.25, now);
+        g.gain.setValueAtTime(0.001, now);
+        g.gain.linearRampToValueAtTime(0.07, now+0.015);
+        g.gain.exponentialRampToValueAtTime(0.001, now+0.22);
+        osc.connect(g);
+        g.connect(masterGain);
+        osc.start(now);
+        osc.stop(now+0.24);
+      }
+    }catch(e){}
+  }
+
+  /* Authentic Nigerian Woman Voice Over (Gemini AI TTS with local en-NG fallback) */
+  var currentVoiceAudio=null;
+  var currentVoiceAbort=null;
+
+  function stopNarration(){
+    if(currentVoiceAbort){
+      try{currentVoiceAbort.abort();}catch(e){}
+      currentVoiceAbort=null;
+    }
+    if(currentVoiceAudio){
+      try{
+        currentVoiceAudio.pause();
+        currentVoiceAudio.currentTime=0;
+      }catch(e){}
+      currentVoiceAudio=null;
+    }
+    if(window.speechSynthesis){
+      try{window.speechSynthesis.cancel();}catch(e){}
+    }
+    if(ambientGain&&audioCtx&&isAudioActive){
+      ambientGain.gain.setTargetAtTime(0.24, audioCtx.currentTime, 0.4);
+    }
+  }
+
+  function speakNarration(text){
+    if(!isAudioActive||!text) return;
+    stopNarration();
+
+    // Smoothly duck ambient music
+    if(ambientGain&&audioCtx){
+      ambientGain.gain.setTargetAtTime(0.04, audioCtx.currentTime, 0.15);
+    }
+
+    var controller=new AbortController();
+    currentVoiceAbort=controller;
+
+    // Primary: Gemini AI TTS with Nigerian Woman Persona
+    fetch('/api/tts',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:text}),
+      signal:controller.signal
+    }).then(function(res){
+      if(!res.ok) throw new Error('TTS response not ok');
+      return res.json();
+    }).then(function(data){
+      if(controller.signal.aborted) return;
+      if(!data||!data.audio) throw new Error('No audio payload');
+
+      var audio=new Audio('data:'+(data.mimeType||'audio/wav')+';base64,'+data.audio);
+      currentVoiceAudio=audio;
+
+      audio.onended=function(){
+        currentVoiceAudio=null;
+        if(ambientGain&&audioCtx&&isAudioActive){
+          ambientGain.gain.setTargetAtTime(0.24, audioCtx.currentTime, 0.4);
+        }
+      };
+      audio.onerror=function(){
+        currentVoiceAudio=null;
+        fallbackSpeech(text);
+      };
+
+      var playPromise=audio.play();
+      if(playPromise!==undefined){
+        playPromise.catch(function(){
+          currentVoiceAudio=null;
+          fallbackSpeech(text);
+        });
+      }
+    }).catch(function(err){
+      if(controller.signal.aborted) return;
+      fallbackSpeech(text);
+    });
+  }
+
+  function fallbackSpeech(text){
+    if(!isAudioActive||!window.speechSynthesis||!text) return;
+    try{
+      window.speechSynthesis.cancel();
+      var utter=new SpeechSynthesisUtterance(text);
+      utter.lang='en-NG';
+      // Warm, melodic Nigerian female speech cadence
+      utter.rate=0.92;
+      utter.pitch=1.05;
+
+      var voices=window.speechSynthesis.getVoices();
+      if(voices&&voices.length){
+        var ngVoice=voices.find(function(v){
+          var name=(v.name||'').toLowerCase();
+          var lang=(v.lang||'').toLowerCase();
+          return (lang==='en-ng'||lang==='en_ng'||lang.includes('ng')||name.includes('nigeria')||name.includes('yoruba')||name.includes('hausa')||name.includes('igbo'))&&
+                 (name.includes('female')||name.includes('woman')||name.includes('blessing')||name.includes('ezinne')||name.includes('chioma')||name.includes('ngozi')||!name.includes('male'));
+        }) || voices.find(function(v){
+          var lang=(v.lang||'').toLowerCase();
+          return lang==='en-ng'||lang==='en_ng'||lang.includes('ng')||(v.name||'').toLowerCase().includes('nigeria');
+        }) || voices.find(function(v){
+          var name=(v.name||'').toLowerCase();
+          var lang=(v.lang||'').toLowerCase();
+          return lang.startsWith('en')&&(name.includes('female')||name.includes('natural')||name.includes('samantha')||name.includes('zira')||name.includes('karen')||name.includes('serena'));
+        }) || voices.find(function(v){ return (v.lang||'').toLowerCase().startsWith('en'); });
+
+        if(ngVoice) utter.voice=ngVoice;
+      }
+
+      utter.onend=utter.onerror=function(){
+        if(ambientGain&&audioCtx&&isAudioActive){
+          ambientGain.gain.setTargetAtTime(0.24, audioCtx.currentTime, 0.4);
+        }
+      };
+
+      window.speechSynthesis.speak(utter);
+    }catch(e){}
+  }
+
+  function narrateCurrentState(){
+    if(!isAudioActive) return;
+    var pg=pages[cur]||pages[0];
+    if(!pg) return;
+    var id=pg.dataset.id;
+    var c=+(pg.dataset.ch||0);
+
+    if(id==='welcome'){
+      speakNarration('Welcome to LOTUS at twenty. Twenty years of halal and ethical finance in Nigeria.');
+      return;
+    }
+    var C=carouselFor(cur);
+    if(id==='timeline'&&tl){
+      var actI=tl.active>=0?tl.active:0;
+      var ev=EV[actI];
+      if(ev){
+        speakNarration(ev.y+', '+ev.h+'. '+ev.p);
+      }
+    } else if(C&&C.cards&&C.active>=0){
+      if(id==='firsts'&&FIRSTS20[C.active]){
+        var item=FIRSTS20[C.active];
+        speakNarration('Record '+(C.active+1)+': '+item.t+'. '+(item.p||''));
+      } else if(id==='facts'&&FACTS20[C.active]){
+        var item=FACTS20[C.active];
+        speakNarration('Fund fact '+(C.active+1)+': '+item.t+'. '+(item.p||''));
+      } else if(id==='people20'&&PEOPLE20[C.active]){
+        var item=PEOPLE20[C.active];
+        speakNarration(item.n+', '+item.r+'. '+item.p);
+      } else if(id==='impact20'&&IMPACT20[C.active]){
+        var item=IMPACT20[C.active];
+        speakNarration(item.t+'. '+(item.p||''));
+      } else if(id==='halal20'&&HALAL20[C.active]){
+        var item=HALAL20[C.active];
+        speakNarration(item.t+'. '+(item.p||''));
+      } else if(id==='press'&&PRESS20[C.active]){
+        var item=PRESS20[C.active];
+        speakNarration(item.y+', '+item.o+': '+item.t);
+      }
+    } else if(id==='offices'){
+      speakNarration('How far we have grown. From a single desk at LOTUS House in Ikoyi in 2006 to 12 locations across 7 states, managing over 65 billion naira for 30,900 unit-holders across Nigeria.');
+    } else if(pg.dataset.splash){
+      speakNarration('Chapter '+c+': '+(chName[c]||pg.dataset.name));
+    } else {
+      speakNarration(pg.dataset.name||('Chapter '+c));
+    }
+  }
+
+  function onPageAudioTrigger(i){
+    if(!isAudioActive) return;
+    playNavChime(true);
+    if(narrateTimer) clearTimeout(narrateTimer);
+    narrateTimer=setTimeout(narrateCurrentState, 200);
+  }
+
+  function onCardAudioTrigger(){
+    if(!isAudioActive) return;
+    playNavChime(false);
+    if(narrateTimer) clearTimeout(narrateTimer);
+    narrateTimer=setTimeout(narrateCurrentState, 200);
+  }
+
+  function setAudioActive(active, notify){
+    isAudioActive=!!active;
+    if(isAudioActive){
+      if(typeof recordAudioActivated==='function')recordAudioActivated();
+      if(!audioCtx){
+        initAudio();
+      } else if(audioCtx.state==='suspended'){
+        audioCtx.resume();
+      }
+      if(masterGain&&audioCtx){
+        var now=audioCtx.currentTime;
+        masterGain.gain.cancelScheduledValues(now);
+        masterGain.gain.setValueAtTime(masterGain.gain.value, now);
+        masterGain.gain.linearRampToValueAtTime(0.35, now+0.4);
+      }
+      scheduleNextChime();
+      if(audioBtn){
+        audioBtn.classList.add('playing');
+        audioBtn.setAttribute('aria-pressed','true');
+        audioBtn.setAttribute('aria-label','Mute ambient sound and narration');
+        audioBtn.title='Mute ambient sound & narration (M)';
+        var svgM=audioBtn.querySelector('.audio-svg-muted');
+        var svgP=audioBtn.querySelector('.audio-svg-playing');
+        if(svgM) svgM.style.display='none';
+        if(svgP) svgP.style.display='block';
+        if(audioBars) audioBars.style.display='inline-flex';
+        if(audioLbl) audioLbl.textContent='Sound On';
+      }
+      if(mobileDrawerAudioBtn){
+        mobileDrawerAudioBtn.classList.add('playing');
+        mobileDrawerAudioBtn.setAttribute('aria-pressed','true');
+        var mSvgM=mobileDrawerAudioIcon?mobileDrawerAudioIcon.querySelector('.audio-svg-muted'):null;
+        var mSvgP=mobileDrawerAudioIcon?mobileDrawerAudioIcon.querySelector('.audio-svg-playing'):null;
+        if(mSvgM) mSvgM.style.display='none';
+        if(mSvgP) mSvgP.style.display='block';
+        if(mobileDrawerAudioStatus) mobileDrawerAudioStatus.textContent='Sound On';
+      }
+      if(mobileNavToggle) mobileNavToggle.classList.add('audio-active');
+      if(notify) showToast('\u266B Sound & narration enabled');
+      try{localStorage.setItem('lotus20:sound','1');}catch(e){}
+      narrateCurrentState();
+    } else {
+      if(masterGain&&audioCtx){
+        var now=audioCtx.currentTime;
+        masterGain.gain.cancelScheduledValues(now);
+        masterGain.gain.setValueAtTime(masterGain.gain.value, now);
+        masterGain.gain.linearRampToValueAtTime(0, now+0.3);
+      }
+      if(chimeTimer){clearTimeout(chimeTimer);chimeTimer=null;}
+      if(narrateTimer){clearTimeout(narrateTimer);narrateTimer=null;}
+      stopNarration();
+      if(audioBtn){
+        audioBtn.classList.remove('playing');
+        audioBtn.setAttribute('aria-pressed','false');
+        audioBtn.setAttribute('aria-label','Unmute ambient sound and narration');
+        audioBtn.title='Turn on ambient sound & narration (M)';
+        var svgM=audioBtn.querySelector('.audio-svg-muted');
+        var svgP=audioBtn.querySelector('.audio-svg-playing');
+        if(svgM) svgM.style.display='block';
+        if(svgP) svgP.style.display='none';
+        if(audioBars) audioBars.style.display='none';
+        if(audioLbl) audioLbl.textContent='Sound';
+      }
+      if(mobileDrawerAudioBtn){
+        mobileDrawerAudioBtn.classList.remove('playing');
+        mobileDrawerAudioBtn.setAttribute('aria-pressed','false');
+        var mSvgM=mobileDrawerAudioIcon?mobileDrawerAudioIcon.querySelector('.audio-svg-muted'):null;
+        var mSvgP=mobileDrawerAudioIcon?mobileDrawerAudioIcon.querySelector('.audio-svg-playing'):null;
+        if(mSvgM) mSvgM.style.display='block';
+        if(mSvgP) mSvgP.style.display='none';
+        if(mobileDrawerAudioStatus) mobileDrawerAudioStatus.textContent='Muted';
+      }
+      if(mobileNavToggle) mobileNavToggle.classList.remove('audio-active');
+      if(notify) showToast('\u2715 Ambient sound muted');
+      try{localStorage.setItem('lotus20:sound','0');}catch(e){}
+    }
+  }
+
+  if(audioBtn){
+    audioBtn.addEventListener('click',function(){
+      setAudioActive(!isAudioActive, true);
+    });
+  }
+
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){
+      if(isAudioActive&&masterGain&&audioCtx){
+        masterGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.2);
+      }
+      stopNarration();
+    } else {
+      if(isAudioActive&&masterGain&&audioCtx){
+        masterGain.gain.setTargetAtTime(0.35, audioCtx.currentTime, 0.3);
+      }
+    }
+  });
+
+  if(window.speechSynthesis&&window.speechSynthesis.onvoiceschanged!==undefined){
+    window.speechSynthesis.onvoiceschanged=function(){};
+  }
+
   function carouselFor(i){var id=pages[i]&&pages[i].dataset.id;return CAR[id]||null;}
 
   /* Global keyboard event listeners mapping to page navigation logic */
@@ -1408,7 +2267,27 @@
   window.addEventListener('keydown',function(e){
     var t=e.target;
     if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'||t.isContentEditable))return;
+    if(e.key==='m'||e.key==='M'){
+      e.preventDefault();
+      setAudioActive(!isAudioActive, true);
+      return;
+    }
+    if(e.key==='b'||e.key==='B'){
+      e.preventDefault();
+      var bOverlay = document.getElementById('badgesOverlay');
+      if(bOverlay && !bOverlay.hidden){
+        if(typeof closeBadgesOverlay==='function') closeBadgesOverlay();
+      } else {
+        if(typeof openBadgesOverlay==='function') openBadgesOverlay();
+      }
+      return;
+    }
     if(e.key==='Escape'){
+      var bOverlay = document.getElementById('badgesOverlay');
+      if(bOverlay && !bOverlay.hidden){
+        if(typeof closeBadgesOverlay==='function') closeBadgesOverlay();
+        return;
+      }
       if(menu&&menu.classList.contains('open'))closeMenu();
       document.querySelectorAll('.card.open').forEach(function(c){c.classList.remove('open');});
       return;
@@ -1474,6 +2353,563 @@
       }
     }
   });
+
+  /* ---------- PWA Compliance & Mobile Floating Install Button ---------- */
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('/sw.js').catch(function(err){
+        console.warn('Service worker registration note:', err);
+      });
+    });
+  }
+
+  var deferredInstallPrompt = null;
+  var pwaFloatContainer = document.getElementById('pwaFloatContainer');
+  var pwaInstallBtn = document.getElementById('pwaInstallBtn');
+  var pwaDismissBtn = document.getElementById('pwaDismissBtn');
+  var pwaIosSheet = document.getElementById('pwaIosSheet');
+  var pwaIosClose = document.getElementById('pwaIosClose');
+  var pwaIosGotIt = document.getElementById('pwaIosGotIt');
+
+  var isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                     (window.navigator.standalone === true);
+  var isDismissed = false;
+  try {
+    isDismissed = sessionStorage.getItem('lotus20_pwa_dismiss') === '1';
+  } catch(e){}
+
+  var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.MSStream;
+  var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                 window.innerWidth <= 768;
+
+  function showPwaFloat(){
+    if(isStandalone || isDismissed || !pwaFloatContainer) return;
+    if(window.innerWidth <= 768 || isMobile){
+      pwaFloatContainer.hidden = false;
+      pwaFloatContainer.classList.add('visible');
+    }
+  }
+
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    showPwaFloat();
+  });
+
+  window.addEventListener('appinstalled', function(){
+    deferredInstallPrompt = null;
+    if(pwaFloatContainer) pwaFloatContainer.hidden = true;
+    showToast('\u2713 LOTUS@20 installed successfully!');
+  });
+
+  // On mobile devices, reveal the floating install button after initial immersion
+  if(!isStandalone && !isDismissed && (isMobile || window.innerWidth <= 768)){
+    setTimeout(showPwaFloat, 1800);
+  }
+
+  window.addEventListener('resize', function(){
+    if(!isStandalone && !isDismissed && (window.innerWidth <= 768 || isMobile)){
+      showPwaFloat();
+    } else if(pwaFloatContainer && window.innerWidth > 768 && !isMobile){
+      pwaFloatContainer.classList.remove('visible');
+    }
+  });
+
+  if(pwaInstallBtn){
+    pwaInstallBtn.addEventListener('click', function(){
+      if(deferredInstallPrompt){
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt.userChoice.then(function(choiceResult){
+          if(choiceResult.outcome === 'accepted'){
+            if(pwaFloatContainer) pwaFloatContainer.hidden = true;
+          }
+          deferredInstallPrompt = null;
+        });
+      } else if(isIOS){
+        if(pwaIosSheet) pwaIosSheet.hidden = false;
+      } else {
+        showToast('To install: Open browser menu (\u22EE) and tap "Install app" or "Add to Home Screen"');
+      }
+    });
+  }
+
+  if(pwaDismissBtn){
+    pwaDismissBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(pwaFloatContainer){
+        pwaFloatContainer.hidden = true;
+        pwaFloatContainer.classList.remove('visible');
+      }
+      isDismissed = true;
+      try { sessionStorage.setItem('lotus20_pwa_dismiss', '1'); } catch(err){}
+    });
+  }
+
+  if(pwaIosClose){
+    pwaIosClose.addEventListener('click', function(){
+      if(pwaIosSheet) pwaIosSheet.hidden = true;
+    });
+  }
+
+  if(pwaIosGotIt){
+    pwaIosGotIt.addEventListener('click', function(){
+      if(pwaIosSheet) pwaIosSheet.hidden = true;
+    });
+  }
+
+  /* ==========================================================================
+     LOTUS@20 Milestones & Digital Badges System - Audio, Toast & UI Handlers
+     ========================================================================== */
+  function playBadgeFanfare(){
+    try {
+      var ctx = audioCtx || (window.AudioContext ? new (window.AudioContext || window.webkitAudioContext)() : null);
+      if(!ctx) return;
+      if(ctx.state === 'suspended') ctx.resume();
+      var now = ctx.currentTime;
+      // Triumphal neo-brutalist fanfare arpeggio: C5 (523.25), E5 (659.25), G5 (783.99), C6 (1046.50)
+      [523.25, 659.25, 783.99, 1046.50].forEach(function(freq, idx){
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+        gain.gain.setValueAtTime(0.001, now + idx * 0.08);
+        gain.gain.linearRampToValueAtTime(0.12, now + idx * 0.08 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.45);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + idx * 0.08);
+        osc.stop(now + idx * 0.08 + 0.48);
+      });
+    } catch(e){}
+  }
+
+  var toastTimeout = null;
+  function showBadgeToast(badge){
+    var toast = document.getElementById('badgeToast');
+    if(!toast) return;
+    var iconEl = document.getElementById('badgeToastIcon');
+    var titleEl = document.getElementById('badgeToastTitle');
+    var descEl = document.getElementById('badgeToastDesc');
+    var ctaEl = document.getElementById('badgeToastCta');
+
+    if(iconEl) iconEl.textContent = badge.icon || '🏆';
+    if(titleEl) titleEl.textContent = badge.title;
+    if(descEl) descEl.textContent = badge.desc;
+
+    toast.hidden = false;
+
+    if(ctaEl){
+      ctaEl.onclick = function(){
+        toast.hidden = true;
+        openBadgesOverlay();
+      };
+    }
+
+    var closeEl = document.getElementById('badgeToastClose');
+    if(closeEl){
+      closeEl.onclick = function(){
+        toast.hidden = true;
+      };
+    }
+
+    if(toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(function(){
+      toast.hidden = true;
+    }, 7000);
+  }
+
+  function triggerBadgeUnlock(badgeId){
+    if(unlockedBadges[badgeId]) return;
+    unlockedBadges[badgeId] = Date.now();
+    saveBadgesStorage();
+
+    var badge = BADGES_CONFIG.find(function(b){ return b.id === badgeId; });
+    if(!badge) return;
+
+    playBadgeFanfare();
+
+    if(typeof confetti === 'function') {
+      try { confetti(); } catch(e){}
+    }
+
+    showBadgeToast(badge);
+
+    var bBtn = document.getElementById('badgesBtn');
+    if(bBtn){
+      bBtn.classList.add('badge-pulse', 'has-unlocked');
+      setTimeout(function(){ bBtn.classList.remove('badge-pulse'); }, 2500);
+    }
+
+    updateBadgesHeaderCount();
+
+    var overlay = document.getElementById('badgesOverlay');
+    if(overlay && !overlay.hidden){
+      renderBadgesOverlay();
+    }
+
+    // Check if grand centurion unlocks as a result!
+    if(badgeId !== 'grand_centurion'){
+      var others = Object.keys(unlockedBadges).filter(function(k){ return k !== 'grand_centurion'; }).length;
+      if(others >= 9){
+        setTimeout(function(){ triggerBadgeUnlock('grand_centurion'); }, 1200);
+      }
+    }
+  }
+
+  function getBadgeProgressDetails(badge){
+    var isUnlocked = !!unlockedBadges[badge.id];
+    var current = 0;
+    var target = badge.target;
+    var pt = progressTracker || {};
+
+    if(badge.id === 'history_explorer'){
+      current = Object.keys(pt.timeline || {}).length;
+      if(isUnlocked || (pt.timeline && pt.timeline['19'])) current = target;
+    } else if(badge.id === 'pioneering_spirit'){
+      current = Object.keys(pt.firsts || {}).length;
+      if(isUnlocked) current = target;
+    } else if(badge.id === 'numbers_master'){
+      current = Object.keys(pt.facts || {}).length;
+      if(isUnlocked) current = target;
+    } else if(badge.id === 'impact_advocate'){
+      current = Object.keys(pt.impact20 || {}).length;
+      if(isUnlocked) current = target;
+    } else if(badge.id === 'halal_guardian'){
+      current = Object.keys(pt.halal20 || {}).length;
+      if(isUnlocked) current = target;
+    } else if(badge.id === 'voices_lotus'){
+      current = ((pt.pages && pt.pages['founder']) ? 1 : 0) + Object.keys(pt.people20 || {}).length;
+      if(isUnlocked) current = target;
+    } else if(badge.id === 'nationwide_footprint'){
+      current = (pt.pages && pt.pages['offices']) ? 1 : 0;
+      if(isUnlocked) current = target;
+    } else if(badge.id === 'halal_scholar'){
+      current = pt.quizDone ? 1 : 0;
+      if(isUnlocked) current = target;
+    } else if(badge.id === 'sonic_traveler'){
+      current = (pt.soundActive || isAudioActive) ? 1 : 0;
+      if(isUnlocked) current = target;
+    } else if(badge.id === 'grand_centurion'){
+      current = Object.keys(unlockedBadges || {}).filter(function(k){ return k !== 'grand_centurion'; }).length;
+      if(isUnlocked) current = target;
+    }
+
+    current = Math.min(target, current);
+    var pct = isUnlocked ? 100 : Math.round((current / target) * 100);
+
+    return {
+      current: current,
+      target: target,
+      pct: pct,
+      unlocked: isUnlocked
+    };
+  }
+
+  function getRankInfo(unlockedCount){
+    if(unlockedCount >= 10) return { title: 'Grand Centurion of LOTUS@20', tag: 'Rank: Grand Champion', icon: '🏆' };
+    if(unlockedCount >= 8)  return { title: 'Platinum Ambassador', tag: 'Rank: Platinum Ambassador', icon: '🌟' };
+    if(unlockedCount >= 6)  return { title: 'Gold Scholar', tag: 'Rank: Gold Scholar', icon: '🥇' };
+    if(unlockedCount >= 3)  return { title: 'Silver Historian', tag: 'Rank: Silver Historian', icon: '🥈' };
+    if(unlockedCount >= 1)  return { title: 'Bronze Explorer', tag: 'Rank: Bronze Explorer', icon: '🥉' };
+    return { title: 'Commemorative Guest', tag: 'Rank: New Visitor', icon: '🎖️' };
+  }
+
+  function updateBadgesHeaderCount(){
+    var unlockedCount = Object.keys(unlockedBadges).length;
+    var totalCount = BADGES_CONFIG.length;
+    var rank = getRankInfo(unlockedCount);
+
+    var pill = document.getElementById('badgeCountPill');
+    if(pill) pill.textContent = unlockedCount + '/' + totalCount;
+
+    var menuCount = document.getElementById('menuBadgeCount');
+    if(menuCount) menuCount.textContent = unlockedCount + '/' + totalCount;
+
+    if(mobileDrawerBadgeCount) mobileDrawerBadgeCount.textContent = unlockedCount + '/' + totalCount;
+    if(mobileDrawerBadgeRank) mobileDrawerBadgeRank.textContent = rank.tag + ' \u00b7 ' + rank.title;
+    if(mobileDrawerBadgesBtn) mobileDrawerBadgesBtn.classList.toggle('has-unlocked', unlockedCount > 0);
+
+    if(mobileNavToggleBadge){
+      if(unlockedCount > 0){
+        mobileNavToggleBadge.style.display = 'inline-flex';
+        mobileNavToggleBadge.textContent = unlockedCount;
+      } else {
+        mobileNavToggleBadge.style.display = 'none';
+      }
+    }
+
+    var bBtn = document.getElementById('badgesBtn');
+    if(bBtn){
+      bBtn.classList.toggle('has-unlocked', unlockedCount > 0);
+    }
+  }
+
+  var activeBadgeFilter = 'all';
+
+  function renderBadgesOverlay(){
+    var unlockedCount = Object.keys(unlockedBadges).length;
+    var totalCount = BADGES_CONFIG.length;
+    var pct = Math.round((unlockedCount / totalCount) * 100);
+    var rank = getRankInfo(unlockedCount);
+
+    var levelIcon = document.getElementById('badgesLevelIcon');
+    var levelTag = document.getElementById('badgesLevelTag');
+    var levelTitle = document.getElementById('badgesLevelTitle');
+    var meterPct = document.getElementById('badgesMeterPct');
+    var meterFill = document.getElementById('badgesMeterFill');
+
+    if(levelIcon) levelIcon.textContent = rank.icon;
+    if(levelTag) levelTag.textContent = rank.tag;
+    if(levelTitle) levelTitle.textContent = unlockedCount + ' of ' + totalCount + ' Milestones Unlocked (' + rank.title + ')';
+    if(meterPct) meterPct.textContent = pct + '%';
+    if(meterFill) meterFill.style.width = pct + '%';
+
+    var fAll = document.getElementById('filterAllCount');
+    var fUnlocked = document.getElementById('filterUnlockedCount');
+    var fLocked = document.getElementById('filterLockedCount');
+
+    if(fAll) fAll.textContent = totalCount;
+    if(fUnlocked) fUnlocked.textContent = unlockedCount;
+    if(fLocked) fLocked.textContent = totalCount - unlockedCount;
+
+    var grid = document.getElementById('badgesGrid');
+    if(!grid) return;
+    grid.innerHTML = '';
+
+    var filtered = BADGES_CONFIG.filter(function(badge){
+      var isUnlocked = !!unlockedBadges[badge.id];
+      if(activeBadgeFilter === 'unlocked') return isUnlocked;
+      if(activeBadgeFilter === 'locked') return !isUnlocked;
+      return true;
+    });
+
+    if(!filtered.length){
+      var emptyNotice = document.createElement('div');
+      emptyNotice.style.gridColumn = '1 / -1';
+      emptyNotice.style.padding = '36px 20px';
+      emptyNotice.style.textAlign = 'center';
+      emptyNotice.style.background = '#fff';
+      emptyNotice.style.border = '2px dashed var(--ink)';
+      emptyNotice.innerHTML = '<strong>No badges match this filter.</strong><p style="margin:6px 0 0;font-size:.85rem;color:#666">Explore the exhibition to earn commemorative milestones!</p>';
+      grid.appendChild(emptyNotice);
+      return;
+    }
+
+    filtered.forEach(function(badge){
+      grid.appendChild(createBadgeCardElement(badge));
+    });
+  }
+
+  function createBadgeCardElement(badge){
+    var isUnlocked = !!unlockedBadges[badge.id];
+    var status = getBadgeProgressDetails(badge);
+    var dateStr = '';
+    if(isUnlocked){
+      var d = new Date(unlockedBadges[badge.id]);
+      dateStr = 'Earned ' + d.toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'});
+    }
+
+    var card = document.createElement('article');
+    card.className = 'badge-card ' + (isUnlocked ? 'unlocked' : 'locked');
+    card.innerHTML =
+      '<div class="badge-card-top">' +
+        '<div class="badge-icon-box" aria-hidden="true">' + badge.icon + '</div>' +
+        '<span class="badge-status-tag ' + (isUnlocked ? 'unlocked' : 'locked') + '">' +
+          (isUnlocked ? '✓ Unlocked' : 'Locked') +
+        '</span>' +
+      '</div>' +
+      '<div class="badge-card-meta">' +
+        '<span class="badge-cat">' + badge.cat + '</span>' +
+        '<h3 class="badge-title">' + badge.title + '</h3>' +
+        '<span class="badge-tagline">' + badge.tagline + '</span>' +
+      '</div>' +
+      '<p class="badge-desc">' + badge.desc + '</p>' +
+      '<div class="badge-progress-wrap">' +
+        '<div class="badge-progress-meta">' +
+          '<span>' + (isUnlocked ? (dateStr || 'Completed ✓') : ('Progress: ' + status.current + ' / ' + status.target + ' ' + badge.unit)) + '</span>' +
+          '<span>' + status.pct + '%</span>' +
+        '</div>' +
+        '<div class="badge-progress-track">' +
+          '<div class="badge-progress-fill" style="width: ' + status.pct + '%"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="badge-actions">' +
+        '<button type="button" class="btn sm ' + (isUnlocked ? 'ghost' : 'dark') + ' badge-goto-btn" data-goto="' + badge.goto + '">' +
+          (isUnlocked ? 'Revisit Milestone &rarr;' : 'Explore Chapter &rarr;') +
+        '</button>' +
+        (isUnlocked ? '<button type="button" class="btn sm ghost badge-share-one" data-bid="' + badge.id + '" title="Share milestone achievement">Share ↗</button>' : '') +
+      '</div>';
+
+    var gotoBtn = card.querySelector('.badge-goto-btn');
+    if(gotoBtn){
+      gotoBtn.addEventListener('click', function(){
+        closeBadgesOverlay();
+        goId(badge.goto);
+      });
+    }
+
+    var shareOneBtn = card.querySelector('.badge-share-one');
+    if(shareOneBtn){
+      shareOneBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var msg = '🏆 I unlocked the "' + badge.title + '" milestone badge on the LOTUS@20 commemorative exhibition! Explore 20 years of halal finance: ' + window.location.origin + '#' + badge.goto;
+        if(navigator.share){
+          navigator.share({ title: 'LOTUS@20 Badge: ' + badge.title, text: msg, url: window.location.origin + '#' + badge.goto }).catch(function(){});
+        } else {
+          copyToClipboard(msg);
+          showToast('\u2713 Milestone achievement copied to clipboard!');
+        }
+      });
+    }
+
+    return card;
+  }
+
+  function openBadgesOverlay(){
+    stopPlay();
+    closeMobileDrawer();
+    var overlay = document.getElementById('badgesOverlay');
+    if(!overlay) return;
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    var btn = document.getElementById('badgesBtn');
+    if(btn) btn.setAttribute('aria-expanded', 'true');
+    renderBadgesOverlay();
+    var closeBtn = document.getElementById('badgesCloseBtn');
+    if(closeBtn) closeBtn.focus({preventScroll:true});
+  }
+
+  function closeBadgesOverlay(){
+    var overlay = document.getElementById('badgesOverlay');
+    if(!overlay) return;
+    overlay.hidden = true;
+    document.body.style.overflow = '';
+    var btn = document.getElementById('badgesBtn');
+    if(btn) {
+      btn.setAttribute('aria-expanded', 'false');
+      btn.focus({preventScroll:true});
+    }
+  }
+
+  // Hook functions invoked from app navigation
+  function recordTimelineCard(i){
+    if(!progressTracker) progressTracker = {};
+    if(!progressTracker.timeline) progressTracker.timeline = {};
+    progressTracker.timeline[i] = 1;
+    saveBadgesStorage();
+    var count = Object.keys(progressTracker.timeline).length;
+    // When user reads all 20 milestones or reaches the 2026 finale milestone (index 19)
+    if(count >= 20 || i >= 19){
+      triggerBadgeUnlock('history_explorer');
+    }
+  }
+
+  function recordTwentyCard(pid, i){
+    if(!progressTracker) progressTracker = {};
+    if(!progressTracker[pid]) progressTracker[pid] = {};
+    progressTracker[pid][i] = 1;
+    saveBadgesStorage();
+
+    if(pid === 'firsts'){
+      var c = Object.keys(progressTracker.firsts || {}).length;
+      if(c >= 12 || i >= 19) triggerBadgeUnlock('pioneering_spirit');
+    } else if(pid === 'facts'){
+      var c = Object.keys(progressTracker.facts || {}).length;
+      if(c >= 12 || i >= 19) triggerBadgeUnlock('numbers_master');
+    } else if(pid === 'impact20'){
+      var c = Object.keys(progressTracker.impact20 || {}).length;
+      if(c >= 12 || i >= 19) triggerBadgeUnlock('impact_advocate');
+    } else if(pid === 'halal20'){
+      var c = Object.keys(progressTracker.halal20 || {}).length;
+      if(c >= 12 || i >= 19) triggerBadgeUnlock('halal_guardian');
+    } else if(pid === 'people20'){
+      var c = Object.keys(progressTracker.people20 || {}).length;
+      if(progressTracker.pages && progressTracker.pages['founder'] && c >= 4) triggerBadgeUnlock('voices_lotus');
+    }
+  }
+
+  function recordPageVisit(pageId){
+    if(!progressTracker) progressTracker = {};
+    if(!progressTracker.pages) progressTracker.pages = {};
+    progressTracker.pages[pageId] = 1;
+    saveBadgesStorage();
+
+    if(pageId === 'offices') {
+      triggerBadgeUnlock('nationwide_footprint');
+    } else if(pageId === 'founder') {
+      if(Object.keys(progressTracker.people20 || {}).length >= 2) {
+        triggerBadgeUnlock('voices_lotus');
+      }
+    }
+  }
+
+  function recordQuizFinished(score){
+    if(!progressTracker) progressTracker = {};
+    progressTracker.quizDone = true;
+    saveBadgesStorage();
+    triggerBadgeUnlock('halal_scholar');
+  }
+
+  function recordAudioActivated(){
+    if(!progressTracker) progressTracker = {};
+    progressTracker.soundActive = true;
+    saveBadgesStorage();
+    triggerBadgeUnlock('sonic_traveler');
+  }
+
+  // Wire up Badges controls
+  var badgesBtn = document.getElementById('badgesBtn');
+  if(badgesBtn) badgesBtn.addEventListener('click', openBadgesOverlay);
+
+  var badgesCloseBtn = document.getElementById('badgesCloseBtn');
+  if(badgesCloseBtn) badgesCloseBtn.addEventListener('click', closeBadgesOverlay);
+
+  var badgesOverlay = document.getElementById('badgesOverlay');
+  if(badgesOverlay){
+    badgesOverlay.addEventListener('click', function(e){
+      if(e.target === badgesOverlay) closeBadgesOverlay();
+    });
+  }
+
+  var menuBadgesTrigger = document.getElementById('menuBadgesTrigger');
+  if(menuBadgesTrigger){
+    menuBadgesTrigger.addEventListener('click', function(){
+      closeMenu();
+      openBadgesOverlay();
+    });
+  }
+
+  document.querySelectorAll('.badges-filter').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.badges-filter').forEach(function(b){
+        b.classList.remove('on');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('on');
+      btn.setAttribute('aria-selected', 'true');
+      activeBadgeFilter = btn.dataset.filter || 'all';
+      renderBadgesOverlay();
+    });
+  });
+
+  var shareBadgesBtn = document.getElementById('shareBadgesBtn');
+  if(shareBadgesBtn){
+    shareBadgesBtn.addEventListener('click', function(){
+      var count = Object.keys(unlockedBadges).length;
+      var rank = getRankInfo(count);
+      var text = '🏆 I\'ve unlocked ' + count + ' of 10 commemorative milestone badges (' + rank.title + ') exploring LOTUS Capital\'s 20-year halal finance exhibition (2006–2026)! Experience the journey: ' + window.location.origin;
+      if(navigator.share){
+        navigator.share({ title: 'My LOTUS@20 Badges', text: text, url: window.location.origin }).catch(function(){});
+      } else {
+        copyToClipboard(text);
+        showToast('\u2713 Badges summary copied to clipboard!');
+      }
+    });
+  }
+
+  // Evaluate initial state on load
+  updateBadgesHeaderCount();
+  if(isAudioActive) recordAudioActivated();
 
   var start=0,h=(location.hash||'').replace('#','');
   pages.forEach(function(pg,i){if(pg.dataset.id===h)start=i;});
