@@ -2158,3 +2158,336 @@ button.logo:focus-visible{outline:2px solid var(--red);outline-offset:3px}
   color: var(--ink-soft);
   margin-top: 2px;
 }
+
+/* ==========================================================================
+   Chapters Directory Screen (Full-Screen Neobrutalist Overview)
+   ========================================================================== */
+.chapters-screen{
+  background: var(--paper);
+  color: var(--ink);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+.chapters-screen .page-inner{
+  padding-block: clamp(28px, 5vh, 64px);
+  margin-block: 0;
+  width: 100%;
+}
+.ch-screen-header{
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 22px;
+  border-bottom: var(--bw) solid var(--ink);
+  margin-bottom: 22px;
+}
+.ch-screen-header-main{
+  flex: 1;
+  min-width: min(100%, 360px);
+}
+.ch-screen-kicker{
+  font-family: var(--mono);
+  font-size: .8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--red);
+  display: inline-block;
+  margin-bottom: 6px;
+}
+.ch-screen-title{
+  font-weight: 800;
+  font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+  line-height: .95;
+  letter-spacing: -.05em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+.ch-screen-title em{
+  font-style: normal;
+  color: var(--red);
+  -webkit-text-stroke: 2px var(--ink);
+}
+.ch-screen-desc{
+  font-size: clamp(.95rem, 1.35vw, 1.12rem);
+  font-weight: 600;
+  color: #333;
+  line-height: 1.45;
+  max-width: 65ch;
+  margin: 0;
+}
+.ch-screen-header-actions{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ch-screen-header-actions .btn{
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+/* Category Filter Bar */
+.ch-screen-filter-bar{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.ch-screen-filter-bar::-webkit-scrollbar{
+  height: 4px;
+}
+.ch-screen-filter-bar::-webkit-scrollbar-thumb{
+  background: var(--ink);
+}
+.ch-filter-btn{
+  border: 2px solid var(--ink);
+  background: var(--white);
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: .74rem;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  box-shadow: 2px 2px 0 var(--ink);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform .1s, background .12s, color .12s, box-shadow .1s;
+  flex-shrink: 0;
+}
+.ch-filter-btn:hover{
+  background: var(--gold);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.ch-filter-btn:active{
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--ink);
+}
+.ch-filter-btn.active{
+  background: var(--ink);
+  color: var(--white);
+  box-shadow: 2.5px 2.5px 0 var(--gold);
+}
+
+/* Grid of 12 Chapter Cards */
+.ch-screen-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+.ch-card{
+  border: var(--bw) solid var(--ink);
+  background: var(--white);
+  box-shadow: var(--sh);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform .15s cubic-bezier(.2,1,.3,1), box-shadow .15s cubic-bezier(.2,1,.3,1), border-color .15s;
+  cursor: pointer;
+  position: relative;
+  border-radius: 0;
+  text-align: left;
+}
+.ch-card:hover{
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.ch-card:focus-visible{
+  outline: 3px dashed var(--red);
+  outline-offset: 4px;
+}
+.ch-card.visited{
+  border-color: var(--ink);
+}
+.ch-card.visited::after{
+  content: '✓ Visited';
+  position: absolute;
+  top: -10px;
+  right: 14px;
+  background: var(--green);
+  color: var(--white);
+  font-family: var(--mono);
+  font-size: .64rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border: 1.5px solid var(--ink);
+  padding: 1px 7px;
+  box-shadow: 1.5px 1.5px 0 var(--ink);
+}
+.ch-card.is-hidden{
+  display: none !important;
+}
+.ch-card-top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.ch-num-badge{
+  font-family: var(--mono);
+  font-size: .74rem;
+  font-weight: 800;
+  background: var(--gold);
+  border: 2px solid var(--ink);
+  padding: 3px 8px;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.ch-cat-tag{
+  font-family: var(--mono);
+  font-size: .68rem;
+  font-weight: 700;
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  padding: 2px 8px;
+  text-transform: uppercase;
+  color: #444;
+}
+.ch-status-badge{
+  font-family: var(--mono);
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-left: auto;
+}
+.ch-card-body{
+  flex: 1;
+}
+.ch-card-title{
+  font-size: 1.38rem;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1.15;
+  margin: 0 0 4px;
+  color: var(--ink);
+}
+.ch-card-era{
+  font-family: var(--mono);
+  font-size: .76rem;
+  font-weight: 700;
+  color: var(--red);
+  white-space: nowrap;
+  display: inline-block;
+  margin-left: 4px;
+}
+.ch-card-sub{
+  font-family: var(--mono);
+  font-size: .78rem;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 10px;
+}
+.ch-card-desc{
+  font-size: .88rem;
+  line-height: 1.45;
+  color: #2b2b2b;
+  margin: 0 0 14px;
+}
+.ch-card-highlights{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.ch-card-highlights span{
+  font-family: var(--mono);
+  font-size: .66rem;
+  font-weight: 700;
+  background: var(--butter);
+  border: 1.5px solid var(--ink);
+  padding: 2px 6px;
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
+.ch-card-footer{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 2px dashed rgba(0,0,0,0.14);
+  margin-top: auto;
+}
+.ch-card-btn{
+  box-shadow: 3px 3px 0 var(--ink);
+  padding: 8px 14px;
+  font-size: .76rem;
+}
+.ch-card-btn:hover{
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.ch-count-indicator{
+  font-family: var(--mono);
+  font-size: .72rem;
+  font-weight: 700;
+  color: #666;
+  white-space: nowrap;
+}
+
+/* Bottom summary row */
+.ch-screen-bottom{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 36px;
+  padding-top: 20px;
+  border-top: var(--bw) solid var(--ink);
+  flex-wrap: wrap;
+}
+.ch-screen-bottom-summary{
+  font-family: var(--mono);
+  font-size: .82rem;
+  color: #444;
+}
+
+@media(max-width: 768px){
+  .ch-screen-header{
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    gap: 14px;
+  }
+  .ch-screen-title{
+    font-size: 2rem;
+  }
+  .ch-screen-grid{
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .ch-card{
+    padding: 16px;
+  }
+  .ch-card:hover{
+    transform: none;
+    box-shadow: var(--sh);
+  }
+  .ch-card:active{
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .ch-screen-header-actions{
+    width: 100%;
+    justify-content: space-between;
+  }
+  .ch-screen-bottom{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    text-align: center;
+  }
+  .ch-screen-bottom .btn{
+    width: 100%;
+  }
+}
+

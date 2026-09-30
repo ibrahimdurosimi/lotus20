@@ -130,7 +130,337 @@
         <p class="w-kicker">2006&ndash;2026</p>
         <h1 class="w-title" aria-label="LOTUS at 20"><span>LOTUS</span><span class="at">@<b id="cnt">20</b></span></h1>
         <p class="w-line">Twenty years of halal finance in Nigeria.</p>
-        <div class="w-cta"><button class="btn dark big" data-goto="next">Explore our journey &rarr;</button></div>
+        <div class="w-cta"><button class="btn dark big" id="exploreJourneyBtn" data-goto="chapters">Explore our journey &rarr;</button></div>
+      </div></div>
+    </section>
+
+    <!-- 0 CHAPTERS DIRECTORY SCREEN -->
+    <section class="page chapters-screen" data-id="chapters" data-name="All Chapters" style="--pg:#F4F4F4">
+      <div class="page-inner"><div class="wrap">
+        <header class="ch-screen-header">
+          <div class="ch-screen-header-main">
+            <div class="ch-screen-kicker">LOTUS@20 &middot; Commemorative Exhibition &middot; 2006&ndash;2026</div>
+            <h2 class="ch-screen-title">All Exhibition <em>Chapters</em></h2>
+            <p class="ch-screen-desc">Explore twenty years of pioneering halal and ethical finance in Nigeria across 12 commemorative chapters. Select any chapter below to dive in, or start sequentially from Chapter 01.</p>
+          </div>
+          <div class="ch-screen-header-actions">
+            <button class="btn dark" id="chScreenStartBtn" data-goto="journey" type="button">Start Chapter 01 &rarr;</button>
+            <button class="btn ghost sm" id="chScreenBadgesTrigger" type="button" title="View unlocked commemorative badges">🏆 Badges (<span id="chScreenBadgeCount">0/10</span>)</button>
+          </div>
+        </header>
+
+        <!-- Chapter Filter Tabs -->
+        <div class="ch-screen-filter-bar" role="tablist" aria-label="Filter chapters by theme">
+          <button class="ch-filter-btn active" data-filter="all" role="tab" aria-selected="true">All Chapters (12)</button>
+          <button class="ch-filter-btn" data-filter="history" role="tab" aria-selected="false">History &amp; Milestones (Ch 1&ndash;2)</button>
+          <button class="ch-filter-btn" data-filter="funds" role="tab" aria-selected="false">Funds &amp; Impact (Ch 3&ndash;5)</button>
+          <button class="ch-filter-btn" data-filter="people" role="tab" aria-selected="false">People &amp; Offices (Ch 6&ndash;8)</button>
+          <button class="ch-filter-btn" data-filter="community" role="tab" aria-selected="false">Wall &amp; Quiz (Ch 9&ndash;10)</button>
+          <button class="ch-filter-btn" data-filter="future" role="tab" aria-selected="false">Future &amp; Xtras (Ch 11&ndash;12)</button>
+        </div>
+
+        <!-- 12 Chapters Responsive Grid -->
+        <div class="ch-screen-grid" id="chaptersScreenGrid">
+          <!-- Chapter 01 -->
+          <article class="ch-card" data-cat="history" data-ch="1" data-target="journey" tabindex="0" role="button" aria-label="Open Chapter 01: The journey">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 01</span>
+              <span class="ch-cat-tag">History</span>
+              <span class="ch-status-badge" id="chStatus1">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">The Journey <span class="ch-card-era">2004&ndash;2026</span></h3>
+              <div class="ch-card-sub">20 years in 20 moments</div>
+              <p class="ch-card-desc">An interactive timeline spanning incorporation in 2004, SEC licensing in 2006, pioneering sub-sovereign and sovereign Sukuks, to managing over ₦65bn.</p>
+              <div class="ch-card-highlights">
+                <span>RC 600195</span>
+                <span>SEC Licences</span>
+                <span>Osun Sukuk</span>
+                <span>FGN Sukuk</span>
+                <span>₦65.85bn</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="journey" type="button">Explore Chapter 01 &rarr;</button>
+              <span class="ch-count-indicator">20 Moments</span>
+            </div>
+          </article>
+
+          <!-- Chapter 02 -->
+          <article class="ch-card" data-cat="history" data-ch="2" data-target="firsts-ch" tabindex="0" role="button" aria-label="Open Chapter 02: 20 firsts & records">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 02</span>
+              <span class="ch-cat-tag">Milestones</span>
+              <span class="ch-status-badge" id="chStatus2">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">20 Firsts &amp; Records</h3>
+              <div class="ch-card-sub">20 times LOTUS led the way</div>
+              <p class="ch-card-desc">First SEC-licensed Islamic fund manager, first Shariah mutual fund (278% subscribed), first corporate Sukuk, NGX index, and 35 consecutive quarterly cash payouts.</p>
+              <div class="ch-card-highlights">
+                <span>278% Subscribed</span>
+                <span>NGX LOTUS Index</span>
+                <span>IFN Deal of Year</span>
+                <span>First ETF</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="firsts-ch" type="button">Explore Chapter 02 &rarr;</button>
+              <span class="ch-count-indicator">20 Records</span>
+            </div>
+          </article>
+
+          <!-- Chapter 03 -->
+          <article class="ch-card" data-cat="funds" data-ch="3" data-target="numbers-ch" tabindex="0" role="button" aria-label="Open Chapter 03: By the numbers">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 03</span>
+              <span class="ch-cat-tag">Funds</span>
+              <span class="ch-status-badge" id="chStatus3">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">By the Numbers</h3>
+              <div class="ch-card-sub">20 facts about our funds</div>
+              <p class="ch-card-desc">Essential financial metrics behind Nigeria's four premier halal mutual funds: LHIF, LHFIF, Halal Equity ETF, and the LOTUS Waqf Fund serving 30,900+ unit-holders.</p>
+              <div class="ch-card-highlights">
+                <span>₦65.85bn NAV</span>
+                <span>30,900+ Investors</span>
+                <span>+35.85% H1 2026</span>
+                <span>~₦45.5bn LHFIF</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="numbers-ch" type="button">Explore Chapter 03 &rarr;</button>
+              <span class="ch-count-indicator">20 Facts</span>
+            </div>
+          </article>
+
+          <!-- Chapter 04 -->
+          <article class="ch-card" data-cat="funds" data-ch="4" data-target="impact-ch" tabindex="0" role="button" aria-label="Open Chapter 04: Real-world impact">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 04</span>
+              <span class="ch-cat-tag">Impact</span>
+              <span class="ch-status-badge" id="chStatus4">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">Real-World Impact</h3>
+              <div class="ch-card-sub">20 ways our work made an impact</div>
+              <p class="ch-card-desc">Islamic finance is backed by real assets. Discover how Sukuk capital built 25 major highways across all 6 geopolitical zones, state schools, and enduring endowments.</p>
+              <div class="ch-card-highlights">
+                <span>25 Highways</span>
+                <span>Osun Schools</span>
+                <span>Cowrywise Micro-savings</span>
+                <span>Waqf Distributions</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="impact-ch" type="button">Explore Chapter 04 &rarr;</button>
+              <span class="ch-count-indicator">20 Impacts</span>
+            </div>
+          </article>
+
+          <!-- Chapter 05 -->
+          <article class="ch-card" data-cat="funds" data-ch="5" data-target="halal-ch" tabindex="0" role="button" aria-label="Open Chapter 05: How halal works">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 05</span>
+              <span class="ch-cat-tag">Governance</span>
+              <span class="ch-status-badge" id="chStatus5">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">How Halal Works</h3>
+              <div class="ch-card-sub">20 ways we make halal investing possible</div>
+              <p class="ch-card-desc">A deep dive into Shariah compliance: zero interest (riba) exclusion, sector screening, leverage ratio caps, dividend purification, and independent advisory governance.</p>
+              <div class="ch-card-highlights">
+                <span>Zero Interest</span>
+                <span>Real Asset Backing</span>
+                <span>33% Debt Cap</span>
+                <span>Purification Audits</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="halal-ch" type="button">Explore Chapter 05 &rarr;</button>
+              <span class="ch-count-indicator">20 Standards</span>
+            </div>
+          </article>
+
+          <!-- Chapter 06 -->
+          <article class="ch-card" data-cat="people" data-ch="6" data-target="people-ch" tabindex="0" role="button" aria-label="Open Chapter 06: The people">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 06</span>
+              <span class="ch-cat-tag">Leadership</span>
+              <span class="ch-status-badge" id="chStatus6">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">The People</h3>
+              <div class="ch-card-sub">20 personalities steering us</div>
+              <p class="ch-card-desc">Meet the minds behind LOTUS: Founder Hajara Folake Adeola, renowned Shariah scholars, board members, and portfolio managers driving ethical wealth creation.</p>
+              <div class="ch-card-highlights">
+                <span>Founder Hajara Adeola</span>
+                <span>Shariah Advisory</span>
+                <span>Board of Directors</span>
+                <span>Fund Managers</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="people-ch" type="button">Explore Chapter 06 &rarr;</button>
+              <span class="ch-count-indicator">20 Leaders</span>
+            </div>
+          </article>
+
+          <!-- Chapter 07 -->
+          <article class="ch-card" data-cat="people" data-ch="7" data-target="press-ch" tabindex="0" role="button" aria-label="Open Chapter 07: In the press">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 07</span>
+              <span class="ch-cat-tag">Press</span>
+              <span class="ch-status-badge" id="chStatus7">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">In the Press</h3>
+              <div class="ch-card-sub">Top 20 headlines over 20 years</div>
+              <p class="ch-card-desc">Two decades of authoritative journalism from Reuters, BusinessDay, The Guardian, and Daily Trust chronicling pioneering deals, ratings, and policy breakthroughs.</p>
+              <div class="ch-card-highlights">
+                <span>BusinessDay</span>
+                <span>The Guardian</span>
+                <span>Reuters</span>
+                <span>Islamic Finance News</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="press-ch" type="button">Explore Chapter 07 &rarr;</button>
+              <span class="ch-count-indicator">20 Headlines</span>
+            </div>
+          </article>
+
+          <!-- Chapter 08 -->
+          <article class="ch-card" data-cat="people" data-ch="8" data-target="home-ch" tabindex="0" role="button" aria-label="Open Chapter 08: Our home & footprint">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 08</span>
+              <span class="ch-cat-tag">Footprint</span>
+              <span class="ch-status-badge" id="chStatus8">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">Our Home &amp; Footprint</h3>
+              <div class="ch-card-sub">12 locations across 7 states</div>
+              <p class="ch-card-desc">Trace the expansion from a single desk at LOTUS House on Awolowo Road in Ikoyi into commercial hubs and advisory suites across 7 states in Nigeria.</p>
+              <div class="ch-card-highlights">
+                <span>Ikoyi HQ</span>
+                <span>Kano &amp; Kaduna</span>
+                <span>Abuja FCT</span>
+                <span>Rivers &amp; Kwara</span>
+                <span>Interactive Map</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="home-ch" type="button">Explore Chapter 08 &rarr;</button>
+              <span class="ch-count-indicator">12 Locations</span>
+            </div>
+          </article>
+
+          <!-- Chapter 09 -->
+          <article class="ch-card" data-cat="community" data-ch="9" data-target="you-ch" tabindex="0" role="button" aria-label="Open Chapter 09: Your turn">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 09</span>
+              <span class="ch-cat-tag">Community</span>
+              <span class="ch-status-badge" id="chStatus9">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">Your Turn &middot; The Wall</h3>
+              <div class="ch-card-sub">Have we impacted you? Leave a note</div>
+              <p class="ch-card-desc">An interactive community guestbook where unit-holders, alumni, and partners share reflections and anniversary greetings with real-time moderation.</p>
+              <div class="ch-card-highlights">
+                <span>Public Wall</span>
+                <span>Moderation Desk</span>
+                <span>Client Stories</span>
+                <span>Alumni Notes</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="you-ch" type="button">Explore Chapter 09 &rarr;</button>
+              <span class="ch-count-indicator">Guestbook Wall</span>
+            </div>
+          </article>
+
+          <!-- Chapter 10 -->
+          <article class="ch-card" data-cat="community" data-ch="10" data-target="quiz-ch" tabindex="0" role="button" aria-label="Open Chapter 10: Know your LOTUS?">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 10</span>
+              <span class="ch-cat-tag">Interactive</span>
+              <span class="ch-status-badge" id="chStatus10">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">Know Your LOTUS?</h3>
+              <div class="ch-card-sub">20 questions &middot; Timed &amp; Leaderboard</div>
+              <p class="ch-card-desc">Put your financial and LOTUS knowledge to the test with our 20-question timed interactive quiz. Unlock commemorative badges and earn your spot on the Leaderboard.</p>
+              <div class="ch-card-highlights">
+                <span>20 Timed Questions</span>
+                <span>Live Leaderboard</span>
+                <span>Scholar Badges</span>
+                <span>Instant Feedback</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="quiz-ch" type="button">Explore Chapter 10 &rarr;</button>
+              <span class="ch-count-indicator">20 Questions</span>
+            </div>
+          </article>
+
+          <!-- Chapter 11 -->
+          <article class="ch-card" data-cat="future" data-ch="11" data-target="next-ch" tabindex="0" role="button" aria-label="Open Chapter 11: The next 20">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 11</span>
+              <span class="ch-cat-tag">Future</span>
+              <span class="ch-status-badge" id="chStatus11">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">The Next 20 &middot; Decade Three</h3>
+              <div class="ch-card-sub">Where LOTUS goes from here</div>
+              <p class="ch-card-desc">The strategic blueprint for 2026 and beyond: seamless wealthtech APIs, FX-denominated dollar halal funds, and non-interest infrastructure REITs.</p>
+              <div class="ch-card-highlights">
+                <span>Wealthtech APIs</span>
+                <span>Dollar Halal Funds</span>
+                <span>Infra REITs</span>
+                <span>Fintech Partnerships</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="next-ch" type="button">Explore Chapter 11 &rarr;</button>
+              <span class="ch-count-indicator">Decade Three</span>
+            </div>
+          </article>
+
+          <!-- Chapter 12 -->
+          <article class="ch-card" data-cat="future" data-ch="12" data-target="xtras-ch" tabindex="0" role="button" aria-label="Open Chapter 12: Xtras">
+            <div class="ch-card-top">
+              <span class="ch-num-badge">Chapter 12</span>
+              <span class="ch-cat-tag">Deep Dives</span>
+              <span class="ch-status-badge" id="chStatus12">Explore &rarr;</span>
+            </div>
+            <div class="ch-card-body">
+              <h3 class="ch-card-title">Xtras &amp; Scoreboard</h3>
+              <div class="ch-card-sub">More numbers, more stories, more detail</div>
+              <p class="ch-card-desc">Interactive tools including Then vs Now comparison slider, full scoreboard metrics, interactive fund charts, Sukuk project gallery, and jargon-busting glossary.</p>
+              <div class="ch-card-highlights">
+                <span>Then &amp; Now</span>
+                <span>Scoreboard</span>
+                <span>Fund Chart</span>
+                <span>What Sukuk Built</span>
+                <span>Glossary</span>
+              </div>
+            </div>
+            <div class="ch-card-footer">
+              <button class="btn sm ch-card-btn" data-goto="xtras-ch" type="button">Explore Chapter 12 &rarr;</button>
+              <span class="ch-count-indicator">6 Explorations</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- Footer bar on chapters screen -->
+        <div class="ch-screen-bottom">
+          <button class="btn ghost sm" data-goto="welcome" type="button">&larr; Back to Cover</button>
+          <div class="ch-screen-bottom-summary">
+            <strong>LOTUS@20 Exhibition Directory</strong> &middot; 12 Chapters &middot; 2004&ndash;2026
+          </div>
+          <button class="btn dark sm" data-goto="journey" type="button">Begin Chapter 01 &rarr;</button>
+        </div>
       </div></div>
     </section>
 
@@ -554,6 +884,7 @@
       <div class="menu-head">
         <h2>All <em>chapters</em></h2>
         <div class="menu-head-actions">
+          <button class="btn sm ghost" id="menuOpenScreenBtn" data-goto="chapters" type="button" style="padding:6px 12px;font-size:.72rem">Full Screen &rarr;</button>
           <button class="menu-badges-trigger" id="menuBadgesTrigger" type="button">🏆 Badges (<span id="menuBadgeCount">0/10</span>)</button>
           <button class="menu-x" id="menuX" aria-label="Close chapters">&times;</button>
         </div>

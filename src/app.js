@@ -1368,6 +1368,7 @@
     if(id==='timeline')tl.go(tl.active<0?0:tl.active,true);
     if(CAR[id]&&id!=='timeline')CAR[id].go(CAR[id].active<0?0:CAR[id].active,true);
     if(id==='welcome'){countUp();}else{stopConfetti();}
+    if(id==='chapters')updateChaptersScreenUI();
     if(id==='wall')loadWall();
     if(id==='leaderboard')loadBoard();
     if(id!=='timeline')stopPlay();
@@ -1379,14 +1380,14 @@
   function updateChrome(i){
     if(!pages[i]) return;
     var pg=pages[i],c=+(pg.dataset.ch||0);
-    if(chap)chap.textContent=c?('Ch '+pad(c)+' \u00b7 '+(chName[c]||'')):'Welcome';
+    if(chap)chap.textContent=c?('Ch '+pad(c)+' \u00b7 '+(chName[c]||'')):(pg.dataset.name||'Welcome');
     var pos=c?(chPages[c]||[]).indexOf(i)+1:0,tot=c?(chPages[c]||[]).length:0;
     if(chapN)chapN.textContent=c?(pos+' / '+tot):'';
-    if(mcount)mcount.textContent=c?('Ch '+pad(c)+' / '+pad(CHN)):'Welcome';
+    if(mcount)mcount.textContent=c?('Ch '+pad(c)+' / '+pad(CHN)):(pg.dataset.name||'Welcome');
 
     // Sync mobile drawer status card & chapter chips
     if(mobileDrawerChap){
-      mobileDrawerChap.textContent=c?('Ch '+pad(c)+' \u00b7 '+(chName[c]||'')):'Welcome & Introduction';
+      mobileDrawerChap.textContent=c?('Ch '+pad(c)+' \u00b7 '+(chName[c]||'')):(pg.dataset.name||'Welcome & Introduction');
     }
     if(mobileDrawerChapterCount){
       mobileDrawerChapterCount.textContent=c?('Ch '+pad(c)+' / '+pad(CHN)):'Cover';
@@ -1451,7 +1452,7 @@
       if(nextChBtn)nextChBtn.hidden=true;
 
       if(backBtn)backBtn.disabled=(i===0);
-      if(backLbl)backLbl.textContent='Back';
+      if(backLbl)backLbl.textContent=(i===1)?'Cover':'Back';
 
       if(i===P_N-1){
         if(nextLbl)nextLbl.textContent='Start again';
@@ -1496,6 +1497,9 @@
       if(i===0){
         navPillTitle.textContent='LOTUS@20';
         if(navPillSub)navPillSub.textContent='Tap for chapters';
+      } else if(pg.dataset.id==='chapters'){
+        navPillTitle.textContent='All Chapters';
+        if(navPillSub)navPillSub.textContent='Tap for chapters';
       } else if(C && C.cards && C.cards.length>1){
         var ci_p=C.active>=0?C.active:0;
         var tot_p=C.cards.length;
@@ -1503,12 +1507,20 @@
         navPillTitle.textContent='Ch '+pad(c)+' \u00b7 '+(isTl_p?'M':'C')+pad(ci_p+1)+'/'+pad(tot_p);
         if(navPillSub)navPillSub.textContent=(chName[c]||'Tap for chapters');
       } else {
-        navPillTitle.textContent=c?('Ch '+pad(c)+' \u00b7 '+(chName[c]||'')):'Welcome';
+        navPillTitle.textContent=c?('Ch '+pad(c)+' \u00b7 '+(chName[c]||'')):(pg.dataset.name||'Welcome');
         if(navPillSub)navPillSub.textContent='Tap for chapters';
       }
     }
 
-    if(c)visited[c]=1;
+    if(c){
+      visited[c]=1;
+      var chCardEl=document.querySelector('.ch-card[data-ch="'+c+'"]');
+      if(chCardEl){
+        chCardEl.classList.add('visited');
+        var chStB=chCardEl.querySelector('.ch-status-badge');
+        if(chStB) chStB.textContent='✓ Visited';
+      }
+    }
     if(segs){
       var chP=chPages[c]||[];
       var pIdx=chP.indexOf(i);
@@ -1653,7 +1665,22 @@
       }
     });
   }
-  document.querySelectorAll('[data-goto]').forEach(function(b){b.addEventListener('click',function(){var g=b.getAttribute('data-goto');go(g==='next'?cur+1:+g);});});
+  document.querySelectorAll('[data-goto]').forEach(function(b){
+    b.addEventListener('click',function(e){
+      e.stopPropagation();
+      var g=b.getAttribute('data-goto');
+      if(!g) return;
+      if(g==='next'){
+        go(cur+1);
+      } else if(g==='prev'){
+        if(cur>0) go(cur-1);
+      } else if(!isNaN(+g)){
+        go(+g);
+      } else {
+        goId(g);
+      }
+    });
+  });
 
   function openMenu(){
     stopPlay();
@@ -1706,7 +1733,7 @@
   if(mobileDrawerChaptersBtn){
     mobileDrawerChaptersBtn.addEventListener('click', function(){
       closeMobileDrawer();
-      openMenu();
+      goId('chapters');
     });
   }
   if(mobileDrawerBadgesBtn){
@@ -2099,6 +2126,10 @@
 
     if(id==='welcome'){
       speakNarration('Welcome to LOTUS at twenty. Twenty years of halal and ethical finance in Nigeria.');
+      return;
+    }
+    if(id==='chapters'){
+      speakNarration('All exhibition chapters. Explore twenty years of LOTUS Capital across twelve commemorative chapters.');
       return;
     }
     var C=carouselFor(cur);
@@ -2625,6 +2656,9 @@
     var menuCount = document.getElementById('menuBadgeCount');
     if(menuCount) menuCount.textContent = unlockedCount + '/' + totalCount;
 
+    var chBadgeCount = document.getElementById('chScreenBadgeCount');
+    if(chBadgeCount) chBadgeCount.textContent = unlockedCount + '/' + totalCount;
+
     if(mobileDrawerBadgeCount) mobileDrawerBadgeCount.textContent = unlockedCount + '/' + totalCount;
     if(mobileDrawerBadgeRank) mobileDrawerBadgeRank.textContent = rank.tag + ' \u00b7 ' + rank.title;
     if(mobileDrawerBadgesBtn) mobileDrawerBadgesBtn.classList.toggle('has-unlocked', unlockedCount > 0);
@@ -2907,8 +2941,76 @@
     });
   }
 
+  // Chapters Screen Filter Tabs & Card Events
+  function updateChaptersScreenUI(){
+    var unlockedCount = Object.keys(unlockedBadges || {}).length;
+    var totalCount = BADGES_CONFIG.length;
+    var bCountEl = document.getElementById('chScreenBadgeCount');
+    if(bCountEl) bCountEl.textContent = unlockedCount + '/' + totalCount;
+
+    Object.keys(visited || {}).forEach(function(chNum){
+      var card = document.querySelector('.ch-card[data-ch="'+chNum+'"]');
+      if(card){
+        card.classList.add('visited');
+        var stB = card.querySelector('.ch-status-badge');
+        if(stB) stB.textContent = '✓ Visited';
+      }
+    });
+  }
+
+  document.querySelectorAll('.ch-filter-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.ch-filter-btn').forEach(function(b){
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      var filter = btn.dataset.filter || 'all';
+      document.querySelectorAll('.ch-card').forEach(function(card){
+        if(filter === 'all' || card.dataset.cat === filter){
+          card.classList.remove('is-hidden');
+        } else {
+          card.classList.add('is-hidden');
+        }
+      });
+    });
+  });
+
+  document.querySelectorAll('.ch-card').forEach(function(card){
+    function triggerCardNav(e){
+      if(safeClosest(e.target, '.ch-card-btn, [data-goto]')) return;
+      var target = card.dataset.target;
+      if(target) goId(target);
+    }
+    card.addEventListener('click', triggerCardNav);
+    card.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        var target = card.dataset.target;
+        if(target) goId(target);
+      }
+    });
+  });
+
+  var menuOpenScreenBtn = document.getElementById('menuOpenScreenBtn');
+  if(menuOpenScreenBtn){
+    menuOpenScreenBtn.addEventListener('click', function(){
+      closeMenu();
+      goId('chapters');
+    });
+  }
+
+  var chScreenBadgesTrigger = document.getElementById('chScreenBadgesTrigger');
+  if(chScreenBadgesTrigger){
+    chScreenBadgesTrigger.addEventListener('click', function(){
+      openBadgesOverlay();
+    });
+  }
+
   // Evaluate initial state on load
   updateBadgesHeaderCount();
+  updateChaptersScreenUI();
   if(isAudioActive) recordAudioActivated();
 
   var start=0,h=(location.hash||'').replace('#','');
