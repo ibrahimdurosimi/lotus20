@@ -682,7 +682,7 @@ button.logo:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 .g-lbl{font-family:var(--mono);font-size:.72rem;font-weight:700;text-transform:uppercase;opacity:.85;line-height:1.2}
 
 .growth-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;align-items:start}
-.growth-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;-webkit-overflow-scrolling:touch}
+.growth-tabs{display:flex;flex-wrap:wrap;gap:8px;padding:0 4px 6px 0;margin-bottom:14px}
 .g-tab{flex-shrink:0;border:2px solid var(--ink);background:var(--white);padding:8px 12px;font-family:var(--mono);font-size:.72rem;font-weight:700;text-transform:uppercase;box-shadow:2px 2px 0 var(--ink);cursor:pointer;transition:background .15s,transform .1s,box-shadow .1s;white-space:nowrap}
 .g-tab:hover{background:var(--gold)}
 .g-tab.on{background:var(--red);color:var(--white);box-shadow:3px 3px 0 var(--ink)}
@@ -697,6 +697,13 @@ button.logo:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 .g-card h3{font-weight:800;font-size:clamp(1.1rem,1.8vw,1.3rem);letter-spacing:-.02em;line-height:1.2}
 .g-card p{font-size:.9rem;line-height:1.5;color:#2c2c2c}
 .g-card-reach{margin-top:4px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.g-locs{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.g-locs li{border-top:1.5px dashed var(--ink);padding-top:8px;display:flex;flex-direction:column;gap:3px;font-size:.86rem;line-height:1.4}
+.g-locs li b{font-weight:800}
+.g-loc-k{font-family:var(--mono);font-size:.66rem;font-weight:700;text-transform:uppercase;opacity:.7}
+.g-loc-a,.g-loc-t{color:#2c2c2c;overflow-wrap:anywhere}
+.g-loc-t{font-family:var(--mono);font-size:.76rem}
+.g-loc-dir{align-self:flex-start;font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--red);text-decoration:underline;text-underline-offset:3px}
 .g-card-pill{font-family:var(--mono);font-size:.68rem;font-weight:700;background:var(--paper);border:1.5px solid var(--ink);padding:2px 6px}
 
 .growth-visual{position:sticky;top:20px}
@@ -2491,3 +2498,22 @@ button.logo:focus-visible{outline:2px solid var(--red);outline-offset:3px}
   }
 }
 
+
+/* Mobile: founder story tabs wrap into a grid instead of clipping */
+@media (max-width:640px){
+  .stepbar{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--bw);background:var(--ink);overflow:visible}
+  .stepbar button{min-width:0;white-space:normal;background:var(--white)}
+  .stepbar button:last-child:nth-child(3n+2){grid-column:span 2}
+  .stepbar button:last-child:nth-child(3n+1){grid-column:span 3}
+  .stepbar button+button{border-left:none}
+}
+
+/* Mobile: badge toast sits at the bottom (above the nav) so it never covers
+   chapter headings, is more compact, and hides the install pill while open. */
+@media (max-width:640px){
+  .badge-toast{top:auto;bottom:calc(76px + env(safe-area-inset-bottom, 0px));animation-name:toastSlideUp}
+  .badge-toast-content{padding:10px 12px;gap:10px}
+  .badge-toast-desc{display:none}
+  body.badge-toast-open .pwa-float-container{display:none !important}
+}
+@keyframes toastSlideUp{from{opacity:0;transform:translate(-50%,24px)}to{opacity:1;transform:translate(-50%,0)}}

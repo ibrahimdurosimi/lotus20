@@ -405,7 +405,7 @@
       title: 'Nationwide Footprint',
       tagline: 'Across All Geo-Zones',
       cat: 'Presence · Chapter 08',
-      desc: 'Explore LOTUS\'s branch network growth from a single Ikoyi desk to 12 locations across Nigeria.',
+      desc: 'Explore LOTUS\'s 12 locations across 7 states, from our Ikoyi head office to Kano, Kaduna and Port Harcourt.',
       icon: '📍',
       goto: 'offices',
       target: 1,
@@ -829,52 +829,56 @@
 
   var GROWTH_STAGES=[
     {
-      id:'origin',
-      phase:'origin',
-      era:'2006 · The Seed',
-      title:'The Starting Line at Falomo, Ikoyi',
-      tag:'Head Office · Lagos State',
-      desc:'When LOTUS Capital received its SEC licence in 2006, non-interest finance in Nigeria was uncharted territory. Operating from LOTUS House on Awolowo Road, the founding team laid the regulatory and institutional foundation for the entire halal capital market in West Africa.',
-      reach:'1 Location · 1 State (Lagos)',
+      id:'lagos',
+      phase:'lagos',
+      era:'Lagos',
+      title:'Head office and Lagos service centres',
+      tag:'5 locations · Lagos State',
+      desc:'Our head office is LOTUS House on Awolowo Road in Ikoyi. Service centres in Ikeja, Egbeda, Surulere and Ikorodu bring us closer to investors across Lagos.',
+      reach:'5 locations · Lagos State',
       cities:['Lagos'],
-      spotTitle:'LOTUS House, Ikoyi (HQ)',
-      spotDesc:'The birthplace of regulated Islamic finance in Nigeria. From here, the team drafted fund structures, advised governments, and launched Nigeria\'s first halal mutual fund.'
+      locs:['Head Office','Ikeja','Egbeda','Surulere','Ikorodu'],
+      spotTitle:'LOTUS House, Ikoyi (head office)',
+      spotDesc:'182 Awolowo Road, Falomo, Ikoyi, Lagos.'
     },
     {
       id:'north',
       phase:'north',
-      era:'Commercial Hubs',
-      title:'Northern Corridors: Kano & Kaduna',
-      tag:'North & Northwest Expansion',
-      desc:'To connect with Nigeria\'s historic trading heartlands, LOTUS established regional hubs along Murtala Mohammed Way in Kano and Ahmadu Bello Way in Kaduna. This anchored private wealth and institutional capital, building the investor trust that later powered the FGN Sovereign Sukuk issues.',
-      reach:'2 Key Northern Centres · Kano & Kaduna States',
+      era:'North',
+      title:'Kano and Kaduna',
+      tag:'2 locations · Kano & Kaduna States',
+      desc:'Our Kano office sits at LOTUS Bank on Murtala Mohammed Way. In Kaduna, we serve investors from the LOTUS Bank branch on Ahmadu Bello Way.',
+      reach:'2 locations · Kano & Kaduna States',
       cities:['Kano','Kaduna'],
-      spotTitle:'Kano & Kaduna Corridors',
-      spotDesc:'Anchoring non-interest capital in Northern commercial powerhouses, giving thousands of families and business owners direct access to regulated halal funds.'
+      locs:['Kano Office','Kaduna'],
+      spotTitle:'Kano & Kaduna',
+      spotDesc:'An office in Kano and a service centre in Kaduna.'
     },
     {
       id:'belt',
       phase:'belt',
-      era:'National Bridge',
-      title:'Connecting the Middle Belt & Niger Delta',
-      tag:'Rivers, Niger & Kwara States',
-      desc:'Expansion extended across regional resource and administrative hubs: Port Harcourt along Aba Road in Rivers State, Minna in partnership with the Islamic Education Trust in Niger State, and Ilorin in Kwara State. This connected civil servants, educators, and oil & gas professionals.',
-      reach:'3 Strategic Centres · Rivers, Niger & Kwara',
-      cities:['Port Harcourt','Minna','Ilorin'],
-      spotTitle:'Rivers, Niger & Kwara',
-      spotDesc:'Expanding beyond commercial megacities to serve universities, public servants, and enterprise leaders seeking interest-free capital management.'
+      era:'North Central & South South',
+      title:'Minna, Ilorin and Port Harcourt',
+      tag:'3 locations · Niger, Kwara & Rivers States',
+      desc:'Service centres with partners in Minna (Islamic Education Trust) and Ilorin (Harmony Securities), and at the LOTUS Bank building on Aba Road, Port Harcourt.',
+      reach:'3 locations · Niger, Kwara & Rivers States',
+      cities:['Minna','Ilorin','Port Harcourt','Niger','Kwara','Rivers'],
+      locs:['Minna','Ilorin','Port Harcourt'],
+      spotTitle:'Minna, Ilorin & Port Harcourt',
+      spotDesc:'Three service centres across three states.'
     },
     {
-      id:'retail',
-      phase:'retail',
-      era:'Grassroots Reach',
-      title:'Community Touchpoints & Retail Wealth',
-      tag:'Decentralized Service Centres',
-      desc:'To bring halal investing within walking distance of everyday people, LOTUS opened community service hubs across high-traffic commerce nodes in Lagos (Ikeja, Surulere, Egbeda, Ikorodu) and Ogun State (Abeokuta, Ijebu-Ode). Paired with the LOTUS Tribe mobile app, 30,900+ unit-holders now invest with ease.',
-      reach:'6 Community Centres · Lagos & Ogun States',
-      cities:['Lagos','Abeokuta','Ijebu-Ode'],
-      spotTitle:'Community Touchpoints',
-      spotDesc:'Physical service centres embedded in major commercial markets, pairing human guidance with digital apps so everyday savers can build wealth ethically.'
+      id:'ogun',
+      phase:'ogun',
+      era:'Ogun',
+      title:'Abeokuta and Ijebu-Ode',
+      tag:'2 locations · Ogun State',
+      desc:'Service centres with community partners: the Al-Nusi Imran Foundation in Abeokuta and the Al-Hayat Relief Foundation in Ijebu-Ode.',
+      reach:'2 locations · Ogun State',
+      cities:['Abeokuta','Ijebu-Ode','Ogun'],
+      locs:['Abeokuta','Ijebu-Ode'],
+      spotTitle:'Abeokuta & Ijebu-Ode',
+      spotDesc:'Two service centres in Ogun State.'
     }
   ];
 
@@ -901,6 +905,8 @@
         if(k==='Kano'||k==='Kaduna') matchStageIdx=1;
         else if(k==='Rivers'||k==='Niger'||k==='Kwara'||k==='Port Harcourt'||k==='Minna'||k==='Ilorin') matchStageIdx=2;
         else if(k==='Abeokuta'||k==='Ijebu-Ode'||k==='Ogun') matchStageIdx=3;
+        var tabBtn=growthTabsEl&&growthTabsEl.querySelector('.g-tab[data-phase="'+GROWTH_STAGES[matchStageIdx].phase+'"]');
+        if(tabBtn){tabBtn.click();return;}
         selectGrowthStage(matchStageIdx);
       });
       mapEl.appendChild(b);pins[k]=b;
@@ -932,11 +938,15 @@
         '<div class="g-card-reach">'+
           '<span class="g-card-pill"><b>Footprint:</b> '+s.reach+'</span>'+
         '</div>'+
+        (isAct?'<ul class="g-locs">'+s.locs.map(function(nm){var l=LOCS.filter(function(x){return x.n===nm;})[0];if(!l)return '';
+          return '<li><b>'+l.n+'</b> <span class="g-loc-k">'+l.k+'</span><span class="g-loc-a">'+l.a+'</span><span class="g-loc-t">'+l.t+'</span>'+
+            (l.u?'<a class="g-loc-dir" href="'+l.u+'" target="_blank" rel="noopener">Get directions &#8599;</a>':'')+'</li>';}).join('')+'</ul>':'')+
       '</article>';
     }).join('');
 
     growthCardsEl.querySelectorAll('.g-card').forEach(function(card){
-      card.addEventListener('click',function(){
+      card.addEventListener('click',function(e){
+        if(e.target.closest('a'))return;
         var idx=+card.dataset.idx;
         selectGrowthStage(idx);
       });
@@ -949,10 +959,12 @@
     });
   }
 
+  var growthFilter='all';
   function selectGrowthStage(idx){
     activeCardIdx=idx;
     var stage=GROWTH_STAGES[idx];
     if(!stage) return;
+    renderGrowthCards(growthFilter);
 
     if(growthCardsEl){
       growthCardsEl.querySelectorAll('.g-card').forEach(function(c){
@@ -995,6 +1007,7 @@
           b.classList.toggle('on',isBtn);
           b.setAttribute('aria-selected',isBtn?'true':'false');
         });
+        growthFilter=ph;
         if(ph==='all'){
           renderGrowthCards('all');
           selectGrowthStage(0);
@@ -1820,7 +1833,7 @@
       }
     } else if(pageId==='offices'){
       title='LOTUS@20 \u00b7 How Far We Have Grown';
-      text='From 1 desk at LOTUS House in Ikoyi to 12 locations across 7 states, managing over \u20A665bn for 30,900+ unit-holders across Nigeria. #LOTUS20 #HalalFinance';
+      text='12 LOTUS locations across 7 states, managing over \u20A665bn for 30,900+ unit-holders across Nigeria. #LOTUS20 #HalalFinance';
     } else if(ch>0){
       title='LOTUS@20 \u00b7 Chapter '+pad(ch)+': '+chTitle;
       text='Exploring Chapter '+pad(ch)+' ('+chTitle+') in the 20-year journey of LOTUS Capital.';
@@ -2160,7 +2173,7 @@
         speakNarration(item.y+', '+item.o+': '+item.t);
       }
     } else if(id==='offices'){
-      speakNarration('How far we have grown. From a single desk at LOTUS House in Ikoyi in 2006 to 12 locations across 7 states, managing over 65 billion naira for 30,900 unit-holders across Nigeria.');
+      speakNarration('Where to find us. Twelve LOTUS locations across seven states, from our head office at LOTUS House in Ikoyi to Kano, Kaduna, Minna, Ilorin, Port Harcourt, Abeokuta and Ijebu-Ode.');
     } else if(pg.dataset.splash){
       speakNarration('Chapter '+c+': '+(chName[c]||pg.dataset.name));
     } else {
@@ -2404,10 +2417,18 @@
 
   var isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
                      (window.navigator.standalone === true);
+  // Dismissal is remembered across visits; otherwise the prompt shows at most once per visit.
   var isDismissed = false;
   try {
-    isDismissed = sessionStorage.getItem('lotus20_pwa_dismiss') === '1';
+    isDismissed = localStorage.getItem('lotus20_pwa_dismiss') === '1' ||
+                  sessionStorage.getItem('lotus20_pwa_seen') === '1';
   } catch(e){}
+  var pwaAutoHide = null;
+  function hidePwaFloat(){
+    if(!pwaFloatContainer) return;
+    pwaFloatContainer.classList.remove('visible');
+    pwaFloatContainer.hidden = true;
+  }
 
   var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.MSStream;
   var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
@@ -2416,8 +2437,13 @@
   function showPwaFloat(){
     if(isStandalone || isDismissed || !pwaFloatContainer) return;
     if(window.innerWidth <= 768 || isMobile){
+      if(pwaFloatContainer.classList.contains('visible')) return;
       pwaFloatContainer.hidden = false;
       pwaFloatContainer.classList.add('visible');
+      try { sessionStorage.setItem('lotus20_pwa_seen', '1'); } catch(e){}
+      // Don't park over the content: tuck the prompt away after a short while.
+      if(pwaAutoHide) clearTimeout(pwaAutoHide);
+      pwaAutoHide = setTimeout(function(){ isDismissed = true; hidePwaFloat(); }, 12000);
     }
   }
 
@@ -2472,7 +2498,8 @@
         pwaFloatContainer.classList.remove('visible');
       }
       isDismissed = true;
-      try { sessionStorage.setItem('lotus20_pwa_dismiss', '1'); } catch(err){}
+      if(pwaAutoHide) clearTimeout(pwaAutoHide);
+      try { localStorage.setItem('lotus20_pwa_dismiss', '1'); } catch(err){}
     });
   }
 
@@ -2528,25 +2555,26 @@
     if(descEl) descEl.textContent = badge.desc;
 
     toast.hidden = false;
+    document.body.classList.add('badge-toast-open');
+    function closeBadgeToast(){
+      toast.hidden = true;
+      document.body.classList.remove('badge-toast-open');
+    }
 
     if(ctaEl){
       ctaEl.onclick = function(){
-        toast.hidden = true;
+        closeBadgeToast();
         openBadgesOverlay();
       };
     }
 
     var closeEl = document.getElementById('badgeToastClose');
     if(closeEl){
-      closeEl.onclick = function(){
-        toast.hidden = true;
-      };
+      closeEl.onclick = closeBadgeToast;
     }
 
     if(toastTimeout) clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(function(){
-      toast.hidden = true;
-    }, 7000);
+    toastTimeout = setTimeout(closeBadgeToast, window.innerWidth <= 640 ? 4500 : 7000);
   }
 
   function triggerBadgeUnlock(badgeId){
