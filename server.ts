@@ -15,7 +15,42 @@ async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
 
-  app.use(express.json());
+  // Behind a reverse proxy/load balancer (Cloud Run, Render, Nginx…) set TRUST_PROXY=1
+  // so rate limiting sees the real visitor IP rather than the proxy's.
+  if (process.env.TRUST_PROXY) app.set('trust proxy', Number(process.env.TRUST_PROXY) || 1);
+
+  app.use(express.json({ limit: '4kb' }));
+
+  // ---- /api/tts abuse protection -------------------------------------------
+  // Narration strings in the app are short. Anything longer is not ours.
+  const TTS_MAX_CHARS = 800;
+  // Uncached generations allowed per visitor IP per window, plus a global
+  // ceiling so a botnet can't run up the Gemini bill. Cached replays are free.
+  const TTS_WINDOW_MS = 10 * 60 * 1000;
+  const TTS_PER_IP = Number(process.env.TTS_PER_IP) || 40;
+  const TTS_GLOBAL_PER_HOUR = Number(process.env.TTS_GLOBAL_PER_HOUR) || 1500;
+  const ipHits = new Map<string, { count: number; reset: number }>();
+  let globalHits = { count: 0, reset: Date.now() + 60 * 60 * 1000 };
+
+  function allowGeneration(ip: string): boolean {
+    const now = Date.now();
+    if (now > globalHits.reset) globalHits = { count: 0, reset: now + 60 * 60 * 1000 };
+    if (globalHits.count >= TTS_GLOBAL_PER_HOUR) return false;
+    let rec = ipHits.get(ip);
+    if (!rec || now > rec.reset) {
+      rec = { count: 0, reset: now + TTS_WINDOW_MS };
+      ipHits.set(ip, rec);
+    }
+    if (rec.count >= TTS_PER_IP) return false;
+    rec.count++;
+    globalHits.count++;
+    return true;
+  }
+  // Sweep expired IP records so the map can't grow without bound.
+  setInterval(() => {
+    const now = Date.now();
+    for (const [ip, rec] of ipHits) if (now > rec.reset) ipHits.delete(ip);
+  }, TTS_WINDOW_MS).unref();
 
   // In-memory cache for generated TTS audio to ensure instant replay
   const audioCache = new Map<string, { audioBase64: string; mimeType: string }>();
@@ -32,10 +67,28 @@ async function startServer() {
       if (!trimmedText) {
         return res.status(400).json({ error: 'Text cannot be empty' });
       }
+      if (trimmedText.length > TTS_MAX_CHARS) {
+        return res.status(413).json({ error: 'Text too long' });
+      }
+
+      // Only accept calls from our own pages (blocks casual cross-site use).
+      const origin = req.get('origin');
+      let sameHost = true;
+      if (origin) {
+        try { sameHost = new URL(origin).host === req.get('host'); } catch { sameHost = false; }
+      }
+      if (!sameHost) {
+        return res.status(403).json({ error: 'Forbidden' });
+      }
 
       if (audioCache.has(trimmedText)) {
         const cached = audioCache.get(trimmedText)!;
         return res.json({ audio: cached.audioBase64, mimeType: cached.mimeType });
+      }
+
+      if (!allowGeneration(req.ip || 'unknown')) {
+        res.set('Retry-After', '600');
+        return res.status(429).json({ error: 'Too many requests' });
       }
 
       const apiKey = process.env.GEMINI_API_KEY;
@@ -43,9 +96,10 @@ async function startServer() {
         return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
       }
 
-      const ai = new GoogleGenAI();
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
-        model: 'gemini-3.8-flash-tts',
+        // Override with GEMINI_TTS_MODEL if Google renames/retires this model.
+        model: process.env.GEMINI_TTS_MODEL || 'gemini-3.8-flash-tts',
         contents: trimmedText,
         config: {
           responseModalities: ['AUDIO'],
@@ -76,7 +130,8 @@ async function startServer() {
       return res.json({ audio: result.audioBase64, mimeType: result.mimeType });
     } catch (err: any) {
       console.error('Error generating Nigerian TTS:', err);
-      return res.status(500).json({ error: err.message || 'TTS generation failed' });
+      // Don't leak provider error details to the browser; the client falls back to device speech.
+      return res.status(500).json({ error: 'TTS generation failed' });
     }
   });
 

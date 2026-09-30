@@ -2,40 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script>
-    // In AI Studio iframe environments, ignore benign Vite WebSocket reconnection noise
-    (function(){
-      function isViteNoise(val){
-        if(!val) return false;
-        var s = typeof val === 'string' ? val : (val.message || val.stack || (val.reason && (val.reason.message || val.reason.stack)) || String(val));
-        if(!s) return false;
-        var lower = s.toLowerCase();
-        return lower.indexOf('[vite]') !== -1 || lower.indexOf('websocket') !== -1 || lower.indexOf('failed to send error to vite server') !== -1;
-      }
-      ['log', 'warn', 'error', 'info', 'debug'].forEach(function(m){
-        var orig = console[m];
-        if(typeof orig !== 'function') return;
-        console[m] = function(){
-          for(var i = 0; i < arguments.length; i++){
-            if(isViteNoise(arguments[i])) return;
-          }
-          return orig.apply(console, arguments);
-        };
-      });
-      window.addEventListener('unhandledrejection', function(e){
-        if(isViteNoise(e && (e.reason || e))){
-          e.preventDefault();
-          if(e.stopImmediatePropagation) e.stopImmediatePropagation();
-        }
-      });
-      window.addEventListener('error', function(e){
-        if(isViteNoise(e && (e.error || e.message || e))){
-          e.preventDefault();
-          if(e.stopImmediatePropagation) e.stopImmediatePropagation();
-        }
-      });
-    })();
-  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>LOTUS@20</title>
   <meta name="description" content="LOTUS@20 - Twenty years of halal finance in Nigeria (2006–2026)." />
@@ -124,7 +90,7 @@
   <main class="pages" id="pages">
     <section class="page welcome" data-id="welcome" data-name="Welcome" style="--pg:var(--red)">
       <div class="w-building-watermark" aria-hidden="true">
-        <img src="/images/designer-1.png" alt="LOTUS House" class="w-building-img">
+        <img src="/images/lotus-hq.jpg" alt="LOTUS House" class="w-building-img">
       </div>
       <div class="page-inner"><div class="wrap">
         <p class="w-kicker">2006&ndash;2026</p>
@@ -340,7 +306,7 @@
             <div class="ch-card-body">
               <h3 class="ch-card-title">Our Home &amp; Footprint</h3>
               <div class="ch-card-sub">12 locations across 7 states</div>
-              <p class="ch-card-desc">Trace the expansion from a single desk at LOTUS House on Awolowo Road in Ikoyi into commercial hubs and advisory suites across 7 states in Nigeria.</p>
+              <p class="ch-card-desc">Find all 12 LOTUS locations across 7 states, with addresses, phone numbers and directions.</p>
               <div class="ch-card-highlights">
                 <span>Ikoyi HQ</span>
                 <span>Kano &amp; Kaduna</span>
@@ -611,27 +577,27 @@
           <p class="sp-line">12 locations across 7 states.</p>
         </div>
         <figure class="sp-photo">
-          <img src="/images/designer-1.png" alt="LOTUS House, Ikoyi, Lagos">
+          <img src="/images/lotus-hq.jpg" loading="lazy" decoding="async" alt="LOTUS House, Ikoyi, Lagos">
           <figcaption>LOTUS House &middot; Ikoyi, Lagos</figcaption>
         </figure>
       </div></div>
     </section>
 
-    <section class="page" data-id="offices" data-ch="8" data-name="How far we've grown" style="--pg:#EAEAEA">
+    <section class="page" data-id="offices" data-ch="8" data-name="Where to find us" style="--pg:#EAEAEA">
       <div class="page-inner"><div class="wrap">
         <div class="sec-title">
-          <h2>How far we've <em>grown</em></h2>
-          <span class="tag">From 1 desk to 12 centres &middot; 7 states</span>
+          <h2>Where to <em>find us</em></h2>
+          <span class="tag">12 locations &middot; 7 states</span>
         </div>
 
         <div class="growth-stats">
           <div class="g-stat">
-            <span class="g-val">1 &rarr; 12</span>
+            <span class="g-val">12</span>
             <span class="g-lbl">Locations nationwide</span>
           </div>
           <div class="g-stat">
-            <span class="g-val">1 &rarr; 7</span>
-            <span class="g-lbl">States with physical hubs</span>
+            <span class="g-val">7</span>
+            <span class="g-lbl">States</span>
           </div>
           <div class="g-stat">
             <span class="g-val">30,900+</span>
@@ -645,12 +611,12 @@
 
         <div class="growth-layout">
           <div class="growth-narrative">
-            <div class="growth-tabs" id="growthTabs" role="tablist" aria-label="Stages of national growth">
-              <button class="g-tab on" data-phase="all" role="tab" aria-selected="true">All 4 Chapters</button>
-              <button class="g-tab" data-phase="origin" role="tab" aria-selected="false">2006: The Seed</button>
-              <button class="g-tab" data-phase="north" role="tab" aria-selected="false">Northern Hubs</button>
-              <button class="g-tab" data-phase="belt" role="tab" aria-selected="false">Niger &amp; Rivers</button>
-              <button class="g-tab" data-phase="retail" role="tab" aria-selected="false">Community Hubs</button>
+            <div class="growth-tabs" id="growthTabs" role="tablist" aria-label="Regions">
+              <button class="g-tab on" data-phase="all" role="tab" aria-selected="true">All regions</button>
+              <button class="g-tab" data-phase="lagos" role="tab" aria-selected="false">Lagos</button>
+              <button class="g-tab" data-phase="north" role="tab" aria-selected="false">Kano &amp; Kaduna</button>
+              <button class="g-tab" data-phase="belt" role="tab" aria-selected="false">Minna, Ilorin &amp; PH</button>
+              <button class="g-tab" data-phase="ogun" role="tab" aria-selected="false">Ogun</button>
             </div>
             <div class="growth-cards" id="growthCards" aria-live="polite"></div>
           </div>
@@ -658,7 +624,7 @@
           <div class="growth-visual">
             <div class="growth-map-card box">
               <div class="g-map-header">
-                <span class="g-map-tag">National Footprint &middot; 2006&ndash;2026</span>
+                <span class="g-map-tag">Our locations</span>
                 <span class="g-map-count" id="growthMapCount">12 centres</span>
               </div>
               <div class="map" id="map">
@@ -666,9 +632,9 @@
                 <span class="cap" id="mapCap">Schematic footprint &middot; 7 states</span>
               </div>
               <div class="growth-spotlight" id="growthSpotlight">
-                <span class="g-spot-kicker" id="gSpotKicker">20-Year Growth</span>
-                <h4 id="gSpotTitle">From Awolowo Road to across Nigeria</h4>
-                <p id="gSpotDesc">What began at LOTUS House in Ikoyi has expanded into commercial hubs across Kano, Kaduna, Niger, Kwara, Rivers, Ogun, and Lagos.</p>
+                <span class="g-spot-kicker" id="gSpotKicker">Lagos</span>
+                <h4 id="gSpotTitle">LOTUS House, Ikoyi (head office)</h4>
+                <p id="gSpotDesc">182 Awolowo Road, Falomo, Ikoyi, Lagos.</p>
               </div>
             </div>
           </div>
@@ -710,7 +676,6 @@
               <b id="wallCount">The wall</b>
               <div style="display:flex;align-items:center;gap:6px">
                 <button class="mini-btn" id="wallRefresh" type="button">Refresh</button>
-                <a href="/admin" class="mini-btn" title="Open Moderation Desk" target="_blank" rel="noopener">Admin</a>
               </div>
             </div>
             <div id="wallBody"></div>
@@ -743,7 +708,6 @@
         <div class="lb-actions">
           <button class="btn" id="lbPlay" type="button">Take the quiz &rarr;</button>
           <button class="btn ghost" id="lbRefresh" type="button">Refresh</button>
-          <a href="/admin" class="btn ghost sm" title="Open Admin Leaderboard Desk" target="_blank" rel="noopener" style="margin-left:auto">Moderation Desk &rarr;</a>
         </div>
       </div></div>
     </section>
@@ -1078,7 +1042,6 @@
       <div class="mobile-drawer-footer">
         <div class="mobile-drawer-footer-title">LOTUS Capital &middot; 2006&ndash;2026</div>
         <div class="mobile-drawer-footer-desc">Halal Asset Management &middot; Ethical Wealth Creation</div>
-        <div style="margin-top:8px"><a href="/admin" class="btn sm" style="text-decoration:none;font-size:.7rem;padding:5px 10px;background:var(--white)" target="_blank" rel="noopener">&#x1F512; Moderation Desk &rarr;</a></div>
       </div>
     </div>
   </aside>
